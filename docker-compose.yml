@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  adiyogi:
+    build:
+      context: ./src/backend
+      dockerfile: Dockerfile
+    container_name: adiyogi
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+      - NODE_OPTIONS=--max_old_space_size=4096
+    volumes:
+      - ./src/backend/output:/usr/src/app/output
+      - ./src/backend/logs:/usr/src/app/logs
+      - ./src/backend/cache:/usr/src/app/cache
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    mem_limit: 1g
+    mem_reservation: 512m
+    cpus: 1.0

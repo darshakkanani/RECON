@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Major Recon Hub - ADIYOGI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #1a1a1a;
+            color: #e0e0e0;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Top Navigation */
+        .top-nav {
+            background: #2d3748;
+            border-bottom: 1px solid #4a5568;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1000;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 0;
+        }
+
+        .nav-tab {
+            background: #4a5568;
+            color: #e0e0e0;
+            border: none;
+            padding: 12px 20px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            border-right: 1px solid #2d3748;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .nav-tab:first-child {
+            border-top-left-radius: 4px;
+        }
+
+        .nav-tab:last-child {
+            border-top-right-radius: 4px;
+            border-right: none;
+        }
+
+        .nav-tab:hover {
+            background: #5a6578;
+        }
+
+        .nav-tab.active {
+            background: #3182ce;
+            color: white;
+        }
+
+        .nav-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #3182ce;
+        }
+
+        /* Main Layout */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            height: calc(100vh - 50px);
+            gap: 0;
+        }
+
+        /* Left Sidebar */
+        .left-sidebar {
+            background: #2d3748;
+            border-right: 1px solid #4a5568;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .sidebar-section {
+            margin-bottom: 30px;
+        }
+
+        .sidebar-section-title {
+            color: #e0e0e0;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #4a5568;
+        }
+
+        .stats-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+
+        .stat-label {
+            color: #a0aec0;
+        }
+
+        .stat-value {
+            color: #e0e0e0;
+            font-weight: 500;
+        }
+
+        .category-list {
+            background: #1a202c;
+            border-radius: 8px;
+            padding: 15px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .category-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            font-size: 13px;
+            border-bottom: 1px solid #4a5568;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .category-item:hover {
+            background: rgba(49, 130, 206, 0.1);
+            border-radius: 4px;
+            padding-left: 8px;
+            padding-right: 8px;
+        }
+
+        .category-item:last-child {
+            border-bottom: none;
+        }
+
+        .category-name {
+            color: #a0aec0;
+        }
+
+        .category-count {
+            color: #3182ce;
+            font-weight: 500;
+        }
+
+        /* Main Content */
+        .main-content {
+            background: #1a1a1a;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .content-header {
+            margin-bottom: 20px;
+        }
+
+        .content-title {
+            color: #e0e0e0;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .content-subtitle {
+            color: #a0aec0;
+            font-size: 14px;
+        }
+
+        .recon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .recon-card {
+            background: #2d3748;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #4a5568;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .recon-card:hover {
+            border-color: #3182ce;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(49, 130, 206, 0.15);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .card-icon {
+            font-size: 1.8rem;
+        }
+
+        .card-info h3 {
+            color: #e0e0e0;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .card-info p {
+            color: #a0aec0;
+            font-size: 12px;
+        }
+
+        .tool-count-badge {
+            background: #3182ce;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-left: auto;
+        }
+
+        .card-description {
+            color: #a0aec0;
+            font-size: 13px;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .tool-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 15px;
+        }
+
+        .tool-tag {
+            background: rgba(49, 130, 206, 0.1);
+            color: #3182ce;
+            padding: 3px 8px;
+            border-radius: 8px;
+            font-size: 11px;
+            border: 1px solid rgba(49, 130, 206, 0.2);
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #4a5568;
+            border-radius: 6px;
+            background: rgba(49, 130, 206, 0.1);
+            color: #3182ce;
+            text-decoration: none;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .action-btn:hover {
+            background: #3182ce;
+            color: white;
+            border-color: #3182ce;
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #4a5568;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #5a6578;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation -->
+    <div class="top-nav">
+        <div class="nav-tabs">
+            <button class="nav-tab" onclick="window.location.href='/dashboard'">Dashboard</button>
+            <button class="nav-tab active">Recon</button>
+            <button class="nav-tab">CVE Testing</button>
+            <button class="nav-tab">Enumeration</button>
+            <button class="nav-tab">Ops Testing</button>
+            <button class="nav-tab">Input Testing</button>
+            <button class="nav-tab">Bypass Testing</button>
+            <button class="nav-tab">Feature Testing</button>
+            <button class="nav-tab">Creative Testing</button>
+            <button class="nav-tab">Chaining</button>
+            <button class="nav-tab">Report</button>
+            <button class="nav-tab">Delete</button>
+        </div>
+    </div>
+
+    <!-- Main Layout -->
+    <div class="main-layout">
+        <!-- Left Sidebar -->
+        <div class="left-sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">Platform Overview</div>
+                <div class="stats-item">
+                    <span class="stat-label">Total Tools:</span>
+                    <span class="stat-value">129+</span>
+                </div>
+                <div class="stats-item">
+                    <span class="stat-label">Categories:</span>
+                    <span class="stat-value">11</span>
+                </div>
+                <div class="stats-item">
+                    <span class="stat-label">Coverage:</span>
+                    <span class="stat-value">100%</span>
+                </div>
+                <div class="stats-item">
+                    <span class="stat-label">Status:</span>
+                    <span class="stat-value">Active</span>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">Tool Categories</div>
+                <div class="category-list">
+                    <div class="category-item" onclick="scrollToCategory('subdomain')">
+                        <span class="category-name">🎯 Subdomain Discovery</span>
+                        <span class="category-count">15</span>
+                    </div>
+                    <div class="category-item" onclick="scrollToCategory('dns')">
+                        <span class="category-name">🌐 DNS & WHOIS</span>
+                        <span class="category-count">15</span>
+                    </div>
+                    <div class="category-item" onclick="scrollToCategory('active')">
+                        <span class="category-name">💥 Active Discovery</span>
+                        <span class="category-count">14</span>
+                    </div>
+                    <div class="category-item" onclick="scrollToCategory('osint')">
+                        <span class="category-name">🕵️ OSINT Intelligence</span>
+                        <span class="category-count">9</span>
+                    </div>
+                    <div class="category-item" onclick="scrollToCategory('code')">
+                        <span class="category-name">🐙 Code & Repository</span>
+                        <span class="category-count">10</span>
+                    </div>
+                    <div class="category-item" onclick="scrollToCategory('javascript')">
+                        <span class="category-name">📜 JavaScript & API</span>
+                        <span class="category-count">13</span>
+                    </div>
+                    <div class="category-item" onclick="scrollToCategory('parameters')">
+                        <span class="category-name">🎯 Parameter Fuzzing</span>
+                        <span class="category-count">6</span>
+                    </div>
+                    <div class="category-item" onclick="scrollToCategory('webapp')">
+                        <span class="category-name">🔒 Web Security</span>
+                        <span class="category-count">18</span>
+                    </div>
+                    <div class="category-item" onclick="scrollToCategory('cloud')">
+                        <span class="category-name">☁️ Cloud & Infrastructure</span>
+                        <span class="category-count">15</span>
+                    </div>
+                    <div class="category-item" onclick="scrollToCategory('mobile')">
+                        <span class="category-name">📱 Mobile & API</span>
+                        <span class="category-count">12</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="content-header">
+                <div class="content-title">Major Reconnaissance Hub</div>
+                <div class="content-subtitle">Comprehensive Information Gathering & Intelligence Platform</div>
+            </div>
+            
+            <div class="recon-grid">
+                <!-- Subdomain Discovery -->
+                <div class="recon-card" onclick="window.location.href='/subdomain-discovery'" id="subdomain">
+                    <div class="card-header">
+                        <span class="card-icon">🎯</span>
+                        <div class="card-info">
+                            <h3>Subdomain Discovery</h3>
+                            <p>Passive & Active Enumeration</p>
+                        </div>
+                        <span class="tool-count-badge">15 Tools</span>
+                    </div>
+                    <div class="card-description">
+                        Comprehensive subdomain enumeration using passive sources, certificate transparency, DNS bruteforcing, and permutation techniques.
+                    </div>
+                    <div class="tool-tags">
+                        <span class="tool-tag">Subfinder</span>
+                        <span class="tool-tag">Amass</span>
+                        <span class="tool-tag">Assetfinder</span>
+                        <span class="tool-tag">crt.sh</span>
+                        <span class="tool-tag">+11 more</span>
+                    </div>
+                    <div class="card-actions">
+                        <a href="/subdomain-discovery" class="action-btn">Launch Tools</a>
+                    </div>
+                </div>
+
+                <!-- DNS & WHOIS Analysis -->
+                <div class="recon-card" onclick="window.location.href='/dns'" id="dns">
+                    <div class="card-header">
+                        <span class="card-icon">🌐</span>
+                        <div class="card-info">
+                            <h3>DNS & WHOIS Analysis</h3>
+                            <p>Domain Intelligence</p>
+                        </div>
+                        <span class="tool-count-badge">15 Tools</span>
+                    </div>
+                    <div class="card-description">
+                        Deep DNS analysis, WHOIS data extraction, domain intelligence gathering, and infrastructure mapping.
+                    </div>
+                    <div class="tool-tags">
+                        <span class="tool-tag">DNSEnum</span>
+                        <span class="tool-tag">Fierce</span>
+                        <span class="tool-tag">DNSMap</span>
+                        <span class="tool-tag">WHOIS</span>
+                        <span class="tool-tag">+11 more</span>
+                    </div>
+                    <div class="card-actions">
+                        <a href="/dns" class="action-btn">Launch Tools</a>
+                    </div>
+                </div>
+
+                <!-- Active Discovery & Bruteforce -->
+                <div class="recon-card" onclick="window.location.href='/active-discovery'" id="active">
+                    <div class="card-header">
+                        <span class="card-icon">💥</span>
+                        <div class="card-info">
+                            <h3>Active Discovery</h3>
+                            <p>Directory & File Bruteforce</p>
+                        </div>
+                        <span class="tool-count-badge">14 Tools</span>
+                    </div>
+                    <div class="card-description">
+                        High-performance directory bruteforcing, file discovery, and active web application enumeration.
+                    </div>
+                    <div class="tool-tags">
+                        <span class="tool-tag">Gobuster</span>
+                        <span class="tool-tag">FFUF</span>
+                        <span class="tool-tag">Feroxbuster</span>
+                        <span class="tool-tag">DIRB</span>
+                        <span class="tool-tag">+10 more</span>
+                    </div>
+                    <div class="card-actions">
+                        <a href="/active-discovery" class="action-btn">Launch Tools</a>
+                    </div>
+                </div>
+
+                <!-- OSINT & Intelligence -->
+                <div class="recon-card" onclick="window.location.href='/osint'" id="osint">
+                    <div class="card-header">
+                        <span class="card-icon">🕵️</span>
+                        <div class="card-info">
+                            <h3>OSINT & Intelligence</h3>
+                            <p>Information Gathering</p>
+                        </div>
+                        <span class="tool-count-badge">9 Tools</span>
+                    </div>
+                    <div class="card-description">
+                        Open source intelligence gathering, social media reconnaissance, and comprehensive information collection.
+                    </div>
+                    <div class="tool-tags">
+                        <span class="tool-tag">Shodan</span>
+                        <span class="tool-tag">SpiderFoot</span>
+                        <span class="tool-tag">Recon-ng</span>
+                        <span class="tool-tag">Sherlock</span>
+                        <span class="tool-tag">+5 more</span>
+                    </div>
+                    <div class="card-actions">
+                        <a href="/osint" class="action-btn">Launch Tools</a>
+                    </div>
+                </div>
+
+                <!-- Code & Repository Search -->
+                <div class="recon-card" onclick="window.location.href='/code-repository'" id="code">
+                    <div class="card-header">
+                        <span class="card-icon">🐙</span>
+                        <div class="card-info">
+                            <h3>Code & Repository</h3>
+                            <p>Source Code Intelligence</p>
+                        </div>
+                        <span class="tool-count-badge">10 Tools</span>
+                    </div>
+                    <div class="card-description">
+                        GitHub reconnaissance, secret detection, repository analysis, and code intelligence gathering.
+                    </div>
+                    <div class="tool-tags">
+                        <span class="tool-tag">TruffleHog</span>
+                        <span class="tool-tag">GitLeaks</span>
+                        <span class="tool-tag">GitDorker</span>
+                        <span class="tool-tag">GAU</span>
+                        <span class="tool-tag">+6 more</span>
+                    </div>
+                    <div class="card-actions">
+                        <a href="/code-repository" class="action-btn">Launch Tools</a>
+                    </div>
+                </div>
+
+                <!-- JavaScript & API Mining -->
+                <div class="recon-card" onclick="window.location.href='/javascript-mining'" id="javascript">
+                    <div class="card-header">
+                        <span class="card-icon">📜</span>
+                        <div class="card-info">
+                            <h3>JavaScript & API</h3>
+                            <p>Web App Surface Mining</p>
+                        </div>
+                        <span class="tool-count-badge">13 Tools</span>
+                    </div>
+                    <div class="card-description">
+                        JavaScript analysis, API endpoint discovery, secret detection, and web application surface mapping.
+                    </div>
+                    <div class="tool-tags">
+                        <span class="tool-tag">LinkFinder</span>
+                        <span class="tool-tag">SecretFinder</span>
+                        <span class="tool-tag">Nuclei</span>
+                        <span class="tool-tag">HTTPx</span>
+                        <span class="tool-tag">+9 more</span>
+                    </div>
+                    <div class="card-actions">
+                        <a href="/javascript-mining" class="action-btn">Launch Tools</a>
+                    </div>
+                </div>
+
+                <!-- Parameter Fuzzing -->
+                <div class="recon-card" onclick="window.location.href='/parameters'" id="parameters">
+                    <div class="card-header">
+                        <span class="card-icon">🎯</span>
+                        <div class="card-info">
+                            <h3>Parameter Fuzzing</h3>
+                            <p>Hidden Parameter Discovery</p>
+                        </div>
+                        <span class="tool-count-badge">6 Tools</span>
+                    </div>
+                    <div class="card-description">
+                        Advanced parameter discovery, fuzzing techniques, and hidden endpoint identification.
+                    </div>
+                    <div class="tool-tags">
+                        <span class="tool-tag">ParamSpider</span>
+                        <span class="tool-tag">Arjun</span>
+                        <span class="tool-tag">X8</span>
+                        <span class="tool-tag">Parameth</span>
+                        <span class="tool-tag">+2 more</span>
+                    </div>
+                    <div class="card-actions">
+                        <a href="/parameters" class="action-btn">Launch Tools</a>
+                    </div>
+                </div>
+
+                <!-- Web Application Security -->
+                <div class="recon-card" onclick="window.location.href='/webapp'" id="webapp">
+                    <div class="card-header">
+                        <span class="card-icon">🔒</span>
+                        <div class="card-info">
+                            <h3>Web App Security</h3>
+                            <p>Security Testing</p>
+                        </div>
+                        <span class="tool-count-badge">18 Tools</span>
+                    </div>
+                    <div class="card-description">
+                        Comprehensive web application security testing, vulnerability scanning, and penetration testing tools.
+                    </div>
+                    <div class="tool-tags">
+                        <span class="tool-tag">SQLMap</span>
+                        <span class="tool-tag">XSStrike</span>
+                        <span class="tool-tag">Nikto</span>
+                        <span class="tool-tag">WPScan</span>
+                        <span class="tool-tag">+14 more</span>
+                    </div>
+                    <div class="card-actions">
+                        <a href="/webapp" class="action-btn">Launch Tools</a>
+                    </div>
+                </div>
+
+                <!-- Cloud & Infrastructure -->
+                <div class="recon-card" onclick="window.location.href='/cloud'" id="cloud">
+                    <div class="card-header">
+                        <span class="card-icon">☁️</span>
+                        <div class="card-info">
+                            <h3>Cloud & Infrastructure</h3>
+                            <p>Cloud Reconnaissance</p>
+                        </div>
+                        <span class="tool-count-badge">15 Tools</span>
+                    </div>
+                    <div class="card-description">
+                        Cloud infrastructure discovery, AWS/Azure/GCP enumeration, and container security assessment.
+                    </div>
+                    <div class="tool-tags">
+                        <span class="tool-tag">CloudEnum</span>
+                        <span class="tool-tag">S3Scanner</span>
+                        <span class="tool-tag">CloudMapper</span>
+                        <span class="tool-tag">Pacu</span>
+                        <span class="tool-tag">+11 more</span>
+                    </div>
+                    <div class="card-actions">
+                        <a href="/cloud" class="action-btn">Launch Tools</a>
+                    </div>
+                </div>
+
+                <!-- Mobile & API Security -->
+                <div class="recon-card" onclick="window.location.href='/mobile'" id="mobile">
+                    <div class="card-header">
+                        <span class="card-icon">📱</span>
+                        <div class="card-info">
+                            <h3>Mobile & API</h3>
+                            <p>Mobile Security Testing</p>
+                        </div>
+                        <span class="tool-count-badge">12 Tools</span>
+                    </div>
+                    <div class="card-description">
+                        Mobile application security testing, API security assessment, and mobile penetration testing.
+                    </div>
+                    <div class="tool-tags">
+                        <span class="tool-tag">MobSF</span>
+                        <span class="tool-tag">APKTool</span>
+                        <span class="tool-tag">Frida</span>
+                        <span class="tool-tag">Postman</span>
+                        <span class="tool-tag">+8 more</span>
+                    </div>
+                    <div class="card-actions">
+                        <a href="/mobile" class="action-btn">Launch Tools</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab functionality with navigation
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                const tabText = this.textContent.trim();
+                
+                // Navigate to different pages based on tab
+                switch(tabText) {
+                    case 'Dashboard':
+                        window.location.href = '/';
+                        break;
+                    case 'Recon':
+                        // Already on recon, just update active state
+                        document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                        this.classList.add('active');
+                        break;
+                    case 'CVE Testing':
+                        window.location.href = '/webapp';
+                        break;
+                    case 'Enumeration':
+                        window.location.href = '/subdomain';
+                        break;
+                    case 'Ops Testing':
+                        window.location.href = '/active';
+                        break;
+                    case 'Input Testing':
+                        window.location.href = '/parameters';
+                        break;
+                    case 'Bypass Testing':
+                        window.location.href = '/dns';
+                        break;
+                    case 'Feature Testing':
+                        window.location.href = '/javascript';
+                        break;
+                    case 'Creative Testing':
+                        window.location.href = '/osint';
+                        break;
+                    case 'Chaining':
+                        window.location.href = '/code';
+                        break;
+                    case 'Report':
+                        window.location.href = '/cloud';
+                        break;
+                    case 'Delete':
+                        window.location.href = '/mobile';
+                        break;
+                    default:
+                        // For unknown tabs, just update active state
+                        document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                        this.classList.add('active');
+                }
+            });
+        });
+
+        // Scroll to category function
+        function scrollToCategory(categoryId) {
+            const element = document.getElementById(categoryId);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                // Highlight the card temporarily
+                element.style.borderColor = '#3182ce';
+                element.style.boxShadow = '0 8px 25px rgba(49, 130, 206, 0.3)';
+                setTimeout(() => {
+                    element.style.borderColor = '#4a5568';
+                    element.style.boxShadow = 'none';
+                }, 2000);
+            }
+        }
+
+        // Card hover effects
+        document.querySelectorAll('.recon-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-4px)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Prevent action buttons from triggering card click
+        document.querySelectorAll('.action-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+        });
+    </script>
+</body>
+</html>

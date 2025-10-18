@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OSINT Intelligence Hub - ADIYOGI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #1a1a1a;
+            min-height: 100vh;
+            color: #e0e0e0;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Top Navigation */
+        .nav-tabs {
+            display: flex;
+            background: #2d3748;
+            border-radius: 12px;
+            padding: 8px;
+            margin-bottom: 30px;
+            overflow-x: auto;
+            border: 1px solid #4a5568;
+        }
+        
+        .nav-tab {
+            padding: 12px 20px;
+            background: transparent;
+            border: none;
+            color: #a0aec0;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            font-weight: 500;
+        }
+        
+        .nav-tab:hover {
+            background: #4a5568;
+            color: #e0e0e0;
+        }
+        
+        .nav-tab.active {
+            background: #3182ce;
+            color: white;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            font-size: 3rem;
+            background: linear-gradient(45deg, #3182ce, #805ad5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            color: #a0aec0;
+            margin-bottom: 20px;
+        }
+        
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #3182ce;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #a0aec0;
+        }
+
+        /* Search Section */
+        .search-section {
+            background: #2d3748;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 40px;
+            border: 1px solid #4a5568;
+        }
+        
+        .search-title {
+            font-size: 1.5rem;
+            color: #e0e0e0;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .search-input {
+            display: flex;
+            gap: 15px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        #domain {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid #4a5568;
+            border-radius: 8px;
+            background: #1a1a1a;
+            color: #e0e0e0;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+        
+        #domain:focus {
+            border-color: #3182ce;
+            box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
+        }
+        
+        #searchBtn {
+            padding: 15px 30px;
+            background: #3182ce;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        #searchBtn:hover:not(:disabled) {
+            background: #2c5aa0;
+            transform: translateY(-1px);
+        }
+        
+        #searchBtn:disabled {
+            background: #4a5568;
+            cursor: not-allowed;
+        }
+
+        /* Tools Grid */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .tool-card {
+            background: #2d3748;
+            border-radius: 12px;
+            padding: 25px;
+            border: 1px solid #4a5568;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .tool-card:hover {
+            transform: translateY(-4px);
+            border-color: #3182ce;
+            box-shadow: 0 10px 25px rgba(49, 130, 206, 0.2);
+        }
+        
+        .tool-card.selected {
+            border-color: #3182ce;
+            background: linear-gradient(135deg, #3182ce 0%, #805ad5 100%);
+            color: white;
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(49, 130, 206, 0.4);
+        }
+        
+        .tool-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .tool-icon {
+            font-size: 2.5rem;
+        }
+        
+        .tool-info h3 {
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+        }
+        
+        .tool-info p {
+            color: #a0aec0;
+            font-size: 0.9rem;
+        }
+        
+        .tool-card.selected .tool-info p {
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .tool-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+        }
+        
+        .tool-tag {
+            background: #4a5568;
+            color: #e0e0e0;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+        
+        .tool-card.selected .tool-tag {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        /* Results Section */
+        .results-section {
+            background: #2d3748;
+            border-radius: 12px;
+            border: 1px solid #4a5568;
+            overflow: hidden;
+        }
+        
+        .results-header {
+            background: #1a1a1a;
+            padding: 20px;
+            border-bottom: 1px solid #4a5568;
+        }
+        
+        .results-header h3 {
+            font-size: 1.3rem;
+            color: #e0e0e0;
+        }
+        
+        .results-content {
+            padding: 20px;
+            min-height: 300px;
+        }
+        
+        .welcome-message {
+            text-align: center;
+            color: #a0aec0;
+            padding: 60px 20px;
+        }
+        
+        .welcome-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+        
+        .results {
+            background: #1a1a1a;
+            border-radius: 8px;
+            padding: 20px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            border: 1px solid #4a5568;
+            max-height: 400px;
+            overflow-y: auto;
+            color: #e0e0e0;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #3182ce;
+        }
+        
+        .success {
+            color: #48bb78;
+            background: rgba(72, 187, 120, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #48bb78;
+            margin-bottom: 15px;
+        }
+        
+        .error {
+            color: #f56565;
+            background: rgba(245, 101, 101, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #f56565;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation Tabs -->
+        <div class="nav-tabs">
+            <button class="nav-tab">Dashboard</button>
+            <button class="nav-tab">Recon</button>
+            <button class="nav-tab">CVE Testing</button>
+            <button class="nav-tab">Enumeration</button>
+            <button class="nav-tab">Ops Testing</button>
+            <button class="nav-tab">Input Testing</button>
+            <button class="nav-tab">Bypass Testing</button>
+            <button class="nav-tab">Feature Testing</button>
+            <button class="nav-tab active">Creative Testing</button>
+            <button class="nav-tab">Chaining</button>
+            <button class="nav-tab">Report</button>
+            <button class="nav-tab">Delete</button>
+        </div>
+
+        <!-- Header -->
+        <div class="header">
+            <h1>🕵️ OSINT Intelligence Hub</h1>
+            <p>Open Source Intelligence Gathering & Information Collection Platform</p>
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <div class="stat-number">9</div>
+                    <div class="stat-label">OSINT Tools</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">6</div>
+                    <div class="stat-label">Techniques</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Coverage</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search Section -->
+        <div class="search-section">
+            <h2 class="search-title">🔍 Target Intelligence Gathering</h2>
+            <div class="search-input">
+                <input type="text" id="domain" placeholder="Enter target (domain, username, email, etc.)" />
+                <button id="searchBtn" disabled>Start Intelligence</button>
+            </div>
+        </div>
+
+        <!-- OSINT Tools Grid -->
+        <div class="tools-grid">
+            <div class="tool-card" data-tool="spiderfoot">
+                <div class="tool-header">
+                    <div class="tool-icon">🕷️</div>
+                    <div class="tool-info">
+                        <h3>SpiderFoot</h3>
+                        <p>Automated OSINT reconnaissance</p>
+                    </div>
+                </div>
+                <div class="tool-tags">
+                    <span class="tool-tag">Automated</span>
+                    <span class="tool-tag">Comprehensive</span>
+                    <span class="tool-tag">Multi-source</span>
+                </div>
+            </div>
+
+            <div class="tool-card" data-tool="shodan">
+                <div class="tool-header">
+                    <div class="tool-icon">🔍</div>
+                    <div class="tool-info">
+                        <h3>Shodan</h3>
+                        <p>Internet-connected device search</p>
+                    </div>
+                </div>
+                <div class="tool-tags">
+                    <span class="tool-tag">IoT Devices</span>
+                    <span class="tool-tag">Services</span>
+                    <span class="tool-tag">Banners</span>
+                </div>
+            </div>
+
+            <div class="tool-card" data-tool="maltego">
+                <div class="tool-header">
+                    <div class="tool-icon">🔗</div>
+                    <div class="tool-info">
+                        <h3>Maltego</h3>
+                        <p>Link analysis and data mining</p>
+                    </div>
+                </div>
+                <div class="tool-tags">
+                    <span class="tool-tag">Link Analysis</span>
+                    <span class="tool-tag">Visualization</span>
+                    <span class="tool-tag">Relationships</span>
+                </div>
+            </div>
+
+            <div class="tool-card" data-tool="recon-ng">
+                <div class="tool-header">
+                    <div class="tool-icon">🔧</div>
+                    <div class="tool-info">
+                        <h3>Recon-ng</h3>
+                        <p>Modular reconnaissance framework</p>
+                    </div>
+                </div>
+                <div class="tool-tags">
+                    <span class="tool-tag">Modular</span>
+                    <span class="tool-tag">Framework</span>
+                    <span class="tool-tag">APIs</span>
+                </div>
+            </div>
+
+            <div class="tool-card" data-tool="osrframework">
+                <div class="tool-header">
+                    <div class="tool-icon">📱</div>
+                    <div class="tool-info">
+                        <h3>OSRFramework</h3>
+                        <p>Social media OSINT toolkit</p>
+                    </div>
+                </div>
+                <div class="tool-tags">
+                    <span class="tool-tag">Social Media</span>
+                    <span class="tool-tag">Usernames</span>
+                    <span class="tool-tag">Profiles</span>
+                </div>
+            </div>
+
+            <div class="tool-card" data-tool="sherlock">
+                <div class="tool-header">
+                    <div class="tool-icon">🔍</div>
+                    <div class="tool-info">
+                        <h3>Sherlock</h3>
+                        <p>Username investigation across platforms</p>
+                    </div>
+                </div>
+                <div class="tool-tags">
+                    <span class="tool-tag">Username Hunt</span>
+                    <span class="tool-tag">Cross-platform</span>
+                    <span class="tool-tag">Social Networks</span>
+                </div>
+            </div>
+
+            <div class="tool-card" data-tool="photon">
+                <div class="tool-header">
+                    <div class="tool-icon">📸</div>
+                    <div class="tool-info">
+                        <h3>Photon</h3>
+                        <p>Web crawler intelligence</p>
+                    </div>
+                </div>
+                <div class="tool-tags">
+                    <span class="tool-tag">Web Crawling</span>
+                    <span class="tool-tag">Intelligence</span>
+                    <span class="tool-tag">Fast</span>
+                </div>
+            </div>
+
+            <div class="tool-card" data-tool="metagoofil">
+                <div class="tool-header">
+                    <div class="tool-icon">📄</div>
+                    <div class="tool-info">
+                        <h3>Metagoofil</h3>
+                        <p>Document metadata extraction</p>
+                    </div>
+                </div>
+                <div class="tool-tags">
+                    <span class="tool-tag">Metadata</span>
+                    <span class="tool-tag">Documents</span>
+                    <span class="tool-tag">Google Dorking</span>
+                </div>
+            </div>
+
+            <div class="tool-card" data-tool="foca">
+                <div class="tool-header">
+                    <div class="tool-icon">🔎</div>
+                    <div class="tool-info">
+                        <h3>FOCA</h3>
+                        <p>Metadata analysis tool</p>
+                    </div>
+                </div>
+                <div class="tool-tags">
+                    <span class="tool-tag">File Analysis</span>
+                    <span class="tool-tag">Metadata</span>
+                    <span class="tool-tag">Intelligence</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div class="results-section">
+            <div class="results-header">
+                <h3>📊 Intelligence Results</h3>
+            </div>
+            <div class="results-content">
+                <div id="output">
+                    <div class="welcome-message">
+                        <div class="welcome-icon">🕵️</div>
+                        <h2>Ready for Intelligence Gathering!</h2>
+                        <p>Select a target and OSINT tool to begin comprehensive open source intelligence collection.</p>
+                        <div style="margin-top: 30px; padding: 20px; background: rgba(49, 130, 206, 0.1); border-radius: 8px; border-left: 4px solid #3182ce;">
+                            <div style="font-weight: 600; color: #3182ce; margin-bottom: 10px;">💡 Quick Start:</div>
+                            <div>1. Enter a target (domain, username, email) above</div>
+                            <div>2. Select an OSINT tool</div>
+                            <div>3. Click "Start Intelligence"</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const domainInput = document.getElementById('domain');
+            const searchBtn = document.getElementById('searchBtn');
+            const output = document.getElementById('output');
+            const toolCards = document.querySelectorAll('.tool-card');
+            const navTabs = document.querySelectorAll('.nav-tab');
+            let selectedTool = null;
+
+            // Navigation functionality
+            navTabs.forEach(tab => {
+                tab.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const tabText = this.textContent.trim();
+                    console.log('Tab clicked:', tabText);
+                    
+                    switch(tabText) {
+                        case 'Dashboard':
+                            window.location.href = '/';
+                            break;
+                        case 'Recon':
+                            window.location.href = '/recon';
+                            break;
+                        case 'CVE Testing':
+                            window.location.href = '/webapp';
+                            break;
+                        case 'Enumeration':
+                            window.location.href = '/subdomain';
+                            break;
+                        case 'Ops Testing':
+                            window.location.href = '/active';
+                            break;
+                        case 'Input Testing':
+                            window.location.href = '/parameters';
+                            break;
+                        case 'Bypass Testing':
+                            window.location.href = '/dns';
+                            break;
+                        case 'Feature Testing':
+                            window.location.href = '/javascript';
+                            break;
+                        case 'Creative Testing':
+                            // Stay on current page
+                            break;
+                        case 'Chaining':
+                            window.location.href = '/code';
+                            break;
+                        case 'Report':
+                            window.location.href = '/cloud';
+                            break;
+                        case 'Delete':
+                            window.location.href = '/mobile';
+                            break;
+                    }
+                });
+            });
+
+            // Enable search button when tool is selected and domain is entered
+            function updateSearchButton() {
+                if (selectedTool && domainInput.value.trim()) {
+                    searchBtn.disabled = false;
+                    searchBtn.textContent = `Investigate with ${selectedTool}`;
+                } else {
+                    searchBtn.disabled = true;
+                    searchBtn.textContent = selectedTool ? 'Enter Target' : 'Select Tool First';
+                }
+            }
+
+            // Tool selection
+            toolCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    toolCards.forEach(c => c.classList.remove('selected'));
+                    card.classList.add('selected');
+                    selectedTool = card.dataset.tool;
+                    updateSearchButton();
+                });
+            });
+
+            // Domain input
+            domainInput.addEventListener('input', updateSearchButton);
+            domainInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && !searchBtn.disabled) {
+                    performSearch();
+                }
+            });
+
+            // Search functionality
+            searchBtn.addEventListener('click', performSearch);
+
+            async function performSearch() {
+                if (!selectedTool || !domainInput.value.trim()) return;
+
+                const domain = domainInput.value.trim();
+                
+                // Show loading
+                output.innerHTML = `
+                    <div class="loading">
+                        <div style="font-size: 2rem; margin-bottom: 15px;">⏳</div>
+                        <div>Running ${selectedTool} investigation on ${domain}...</div>
+                        <div style="font-size: 0.9rem; margin-top: 10px; opacity: 0.7;">Gathering intelligence...</div>
+                    </div>
+                `;
+
+                try {
+                    const response = await fetch('/api/v2/execute/single', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            domain: domain,
+                            tool: selectedTool
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    if (data.success && data.data) {
+                        const results = data.data.results || [];
+                        const resultCount = data.data.count || 0;
+                        output.innerHTML = `
+                            <div class="success">
+                                ✅ Gathered ${resultCount} intelligence results using ${selectedTool} for ${domain}
+                            </div>
+                            <div class="results">${results.length > 0 ? results.join('\n') : 'No results found' || 'No detailed results available'}</div>
+                        `;
+                    } else {
+                        output.innerHTML = `
+                            <div class="error">
+                                ❌ Intelligence Error: ${data.error || 'Unknown error occurred'}
+                            </div>
+                        `;
+                    }
+                } catch (error) {
+                    output.innerHTML = `
+                        <div class="error">
+                            ❌ Network Error: ${error.message}
+                        </div>
+                    `;
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+        }
+        
+        .tool-icon {
+            font-size: 2rem;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+        }
+        
+        .tool-name {
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+        
+        .tool-desc {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            line-height: 1.3;
+        }
+        
+        .results-panel {
+            background: rgba(255, 255, 255, 0.98);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .results-header {
+            padding: 25px;
+            border-bottom: 2px solid rgba(102, 126, 234, 0.1);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .results-content {
+            padding: 25px;
+            flex: 1;
+            overflow-y: auto;
+            background: rgba(255, 255, 255, 0.95);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .welcome {
+            text-align: center;
+            color: #666;
+            padding: 50px 30px;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #667eea;
+        }
+        
+        .results {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            border: 1px solid #e0e0e0;
+            flex: 1;
+            overflow-y: scroll;
+            word-wrap: break-word;
+            min-height: 0;
+            max-height: calc(100vh - 300px);
+        }
+        
+        .error {
+            color: #e74c3c;
+            background: #ffeaea;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #e74c3c;
+        }
+        
+        .success {
+            color: #27ae60;
+            background: #eafaf1;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #27ae60;
+            margin-bottom: 15px;
+            flex-shrink: 0;
+        }
+        
+        #output {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-left">
+                <a href="/" class="back-btn">← Back to Home</a>
+                <h1>🕵️ OSINT & Intelligence</h1>
+            </div>
+            <div>9 Professional Tools</div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Sidebar with Tools -->
+            <div class="sidebar">
+                <!-- Search Section -->
+                <div class="search-section">
+                    <div class="search-input">
+                        <input type="text" id="domain" placeholder="Enter domain (e.g., google.com)" />
+                        <button id="searchBtn" disabled>Search</button>
+                    </div>
+                </div>
+                
+                <!-- Tools Container -->
+                <div class="tools-container">
+                    <div class="section-title">OSINT & Intelligence Tools</div>
+                    <div class="tools-grid">
+                        <button class="tool-btn" data-tool="spiderfoot">
+                            <span class="tool-icon">🕷️</span>
+                            <div class="tool-name">SpiderFoot</div>
+                            <div class="tool-desc">Automated OSINT collection</div>
+                        </button>
+                        <button class="tool-btn" data-tool="shodan">
+                            <span class="tool-icon">🔍</span>
+                            <div class="tool-name">Shodan</div>
+                            <div class="tool-desc">Internet device search</div>
+                        </button>
+                        <button class="tool-btn" data-tool="maltego">
+                            <span class="tool-icon">🔗</span>
+                            <div class="tool-name">Maltego</div>
+                            <div class="tool-desc">Link analysis platform</div>
+                        </button>
+                        <button class="tool-btn" data-tool="recon-ng">
+                            <span class="tool-icon">🔧</span>
+                            <div class="tool-name">Recon-ng</div>
+                            <div class="tool-desc">Modular reconnaissance</div>
+                        </button>
+                        <button class="tool-btn" data-tool="osrframework">
+                            <span class="tool-icon">📱</span>
+                            <div class="tool-name">OSRFramework</div>
+                            <div class="tool-desc">Social media OSINT</div>
+                        </button>
+                        <button class="tool-btn" data-tool="sherlock">
+                            <span class="tool-icon">🔍</span>
+                            <div class="tool-name">Sherlock</div>
+                            <div class="tool-desc">Username investigation</div>
+                        </button>
+                        <button class="tool-btn" data-tool="photon">
+                            <span class="tool-icon">📸</span>
+                            <div class="tool-name">Photon</div>
+                            <div class="tool-desc">Web crawler intelligence</div>
+                        </button>
+                        <button class="tool-btn" data-tool="metagoofil">
+                            <span class="tool-icon">📄</span>
+                            <div class="tool-name">Metagoofil</div>
+                            <div class="tool-desc">Document metadata extraction</div>
+                        </button>
+                        <button class="tool-btn" data-tool="foca">
+                            <span class="tool-icon">🔎</span>
+                            <div class="tool-name">FOCA</div>
+                            <div class="tool-desc">Metadata analysis tool</div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Panel -->
+            <div class="results-panel">
+                <div class="results-header">
+                    <h3 style="margin: 0; font-size: 1.2rem;">📊 OSINT Intelligence Results</h3>
+                </div>
+                <div class="results-content">
+                    <div id="output">
+                        <div class="welcome">
+                            <div style="font-size: 3rem; margin-bottom: 20px; opacity: 0.3;">🕵️</div>
+                            <h2 style="margin-bottom: 20px; color: #667eea; font-size: 1.5rem;">Ready for Intelligence Gathering!</h2>
+                            <div style="background: rgba(102, 126, 234, 0.05); padding: 25px; border-radius: 15px; border: 2px solid rgba(102, 126, 234, 0.1);">
+                                <div style="margin-bottom: 15px; font-size: 1.1rem; color: #333; font-weight: 600;">Quick Start Guide</div>
+                                <div style="margin-bottom: 8px;">🕵️ <strong>Step 1:</strong> Enter a target domain or organization</div>
+                                <div style="margin-bottom: 8px;">🔧 <strong>Step 2:</strong> Select an OSINT tool</div>
+                                <div style="margin-bottom: 15px;">🚀 <strong>Step 3:</strong> Click Search to gather intelligence</div>
+                                <div style="margin-top: 20px; padding: 15px; background: rgba(255, 255, 255, 0.8); border-radius: 10px; border-left: 4px solid #667eea;">
+                                    <div style="font-weight: 600; color: #667eea; margin-bottom: 5px;">💡 Pro Tips:</div>
+                                    <div style="font-size: 0.9rem;">• Use SpiderFoot for comprehensive automated OSINT</div>
+                                    <div style="font-size: 0.9rem;">• Use Sherlock for username investigations</div>
+                                    <div style="font-size: 0.9rem;">• Use Metagoofil for document intelligence</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const domainInput = document.getElementById('domain');
+        const searchBtn = document.getElementById('searchBtn');
+        const output = document.getElementById('output');
+        const toolBtns = document.querySelectorAll('.tool-btn');
+        let selectedTool = null;
+
+        // Enable search button when tool is selected and domain is entered
+        function updateSearchButton() {
+            if (selectedTool && domainInput.value.trim()) {
+                searchBtn.disabled = false;
+                searchBtn.textContent = `Search with ${selectedTool}`;
+            } else {
+                searchBtn.disabled = true;
+                searchBtn.textContent = selectedTool ? 'Enter Domain' : 'Select Tool First';
+            }
+        }
+
+        // Tool selection
+        toolBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                toolBtns.forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+                selectedTool = btn.dataset.tool;
+                updateSearchButton();
+            });
+        });
+
+        // Domain input
+        domainInput.addEventListener('input', updateSearchButton);
+        domainInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !searchBtn.disabled) {
+                performSearch();
+            }
+        });
+
+        // Search functionality
+        searchBtn.addEventListener('click', performSearch);
+
+        async function performSearch() {
+            if (!selectedTool || !domainInput.value.trim()) return;
+
+            const domain = domainInput.value.trim();
+            
+            // Show loading
+            output.innerHTML = `
+                <div class="loading">
+                    <div style="font-size: 2rem; margin-bottom: 15px;">⏳</div>
+                    <div>Running ${selectedTool} on ${domain}...</div>
+                    <div style="font-size: 0.9rem; margin-top: 10px; opacity: 0.7;">Gathering intelligence...</div>
+                </div>
+            `;
+
+            try {
+                const response = await fetch('/api/v2/execute/single', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        domain: domain,
+                        tool: selectedTool
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success && data.data) {
+                        const results = data.data.results || [];
+                    const resultCount = data.data.count || 0;
+                    output.innerHTML = `
+                        <div class="success">
+                            ✅ Found ${resultCount} intelligence results using ${selectedTool} for ${domain}
+                        </div>
+                        <div class="results">${results.length > 0 ? results.join('\n') : 'No results found' || 'No detailed results available'}</div>
+                    `;
+                } else {
+                    output.innerHTML = `
+                        <div class="error">
+                            ❌ Error: ${data.error || 'Unknown error occurred'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                output.innerHTML = `
+                    <div class="error">
+                        ❌ Network Error: ${error.message}
+                    </div>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
