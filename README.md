@@ -1,11 +1,11 @@
-# ADIYOGI - Information Gathering Platform
+# Information Gathering Platform
 
 A comprehensive web-based information gathering and subdomain discovery platform with 20+ integrated tools.
 
 ## 🏗️ Optimized Project Structure
 
 ```
-ADIYOGI/
+RECON/
 ├── config/                 # Configuration files
 │   └── app.config.js      # Application settings
 ├── controllers/           # Request handlers
