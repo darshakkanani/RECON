@@ -12,17 +12,8 @@
     <div class="top-nav">
         <div class="nav-tabs">
             <button class="nav-tab" onclick="window.location.href='/dashboard'">Dashboard</button>
-            <button class="nav-tab active">Recon</button>
-            <button class="nav-tab">CVE Testing</button>
-            <button class="nav-tab">Enumeration</button>
-            <button class="nav-tab">Ops Testing</button>
-            <button class="nav-tab">Input Testing</button>
-            <button class="nav-tab">Bypass Testing</button>
-            <button class="nav-tab">Feature Testing</button>
-            <button class="nav-tab">Creative Testing</button>
-            <button class="nav-tab">Chaining</button>
-            <button class="nav-tab">Report</button>
-            <button class="nav-tab">Delete</button>
+            <button class="nav-tab active" onclick="window.location.href='/recon'">Recon</button>
+            <button class="nav-tab" onclick="window.location.href='/health'">Health</button>
         </div>
     </div>
 
@@ -30,71 +21,6 @@
     <div class="main-layout">
         <!-- Left Sidebar -->
         <div class="left-sidebar">
-            <div class="sidebar-section">
-                <div class="sidebar-section-title">Platform Overview</div>
-                <div class="stats-item">
-                    <span class="stat-label">Total Tools:</span>
-                    <span class="stat-value" data-stat="total-tools">129+</span>
-                </div>
-                <div class="stats-item">
-                    <span class="stat-label">Categories:</span>
-                    <span class="stat-value">11</span>
-                </div>
-                <div class="stats-item">
-                    <span class="stat-label">Coverage:</span>
-                    <span class="stat-value">100%</span>
-                </div>
-                <div class="stats-item">
-                    <span class="stat-label">Active Scans:</span>
-                    <span class="stat-value" data-stat="active-scans">0</span>
-                </div>
-            </div>
-
-            <div class="sidebar-section">
-                <div class="sidebar-section-title">Tool Categories</div>
-                <div class="category-list">
-                    <div class="category-item" onclick="scrollToCategory('subdomain')">
-                        <span class="category-name">🎯 Subdomain Discovery</span>
-                        <span class="category-count">15</span>
-                    </div>
-                    <div class="category-item" onclick="scrollToCategory('dns')">
-                        <span class="category-name">🌐 DNS & WHOIS</span>
-                        <span class="category-count">15</span>
-                    </div>
-                    <div class="category-item" onclick="scrollToCategory('active')">
-                        <span class="category-name">💥 Active Discovery</span>
-                        <span class="category-count">14</span>
-                    </div>
-                    <div class="category-item" onclick="scrollToCategory('osint')">
-                        <span class="category-name">🕵️ OSINT Intelligence</span>
-                        <span class="category-count">9</span>
-                    </div>
-                    <div class="category-item" onclick="scrollToCategory('code')">
-                        <span class="category-name">🐙 Code & Repository</span>
-                        <span class="category-count">10</span>
-                    </div>
-                    <div class="category-item" onclick="scrollToCategory('javascript')">
-                        <span class="category-name">📜 JavaScript & API</span>
-                        <span class="category-count">13</span>
-                    </div>
-                    <div class="category-item" onclick="scrollToCategory('parameters')">
-                        <span class="category-name">🎯 Parameter Fuzzing</span>
-                        <span class="category-count">6</span>
-                    </div>
-                    <div class="category-item" onclick="scrollToCategory('webapp')">
-                        <span class="category-name">🔒 Web Security</span>
-                        <span class="category-count">18</span>
-                    </div>
-                    <div class="category-item" onclick="scrollToCategory('cloud')">
-                        <span class="category-name">☁️ Cloud & Infrastructure</span>
-                        <span class="category-count">15</span>
-                    </div>
-                    <div class="category-item" onclick="scrollToCategory('mobile')">
-                        <span class="category-name">📱 Mobile & API</span>
-                        <span class="category-count">12</span>
-                    </div>
-                </div>
-            </div>
         </div>
 
         <!-- Main Content -->

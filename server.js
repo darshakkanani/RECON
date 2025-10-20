@@ -321,6 +321,114 @@ class PerfectADIYOGIServer {
         this.app.get('/api/v2/execution/:executionId', getExecutionStatus);
         this.app.get('/api/v2/stats', getToolStatistics);
         
+        // Bulk domain discovery endpoint
+        this.app.post('/api/v2/bulk-discovery', async (req, res) => {
+            try {
+                const { domains, tools, options = {} } = req.body;
+                
+                if (!domains || !Array.isArray(domains) || domains.length === 0) {
+                    return res.status(400).json({
+                        success: false,
+                        error: 'Domains array is required and must not be empty'
+                    });
+                }
+                
+                if (!tools || !Array.isArray(tools) || tools.length === 0) {
+                    return res.status(400).json({
+                        success: false,
+                        error: 'Tools array is required and must not be empty'
+                    });
+                }
+                
+                logger.info('🔄 Bulk domain discovery requested', {
+                    domainCount: domains.length,
+                    tools,
+                    options,
+                    requestId: req.requestId
+                });
+                
+                const results = [];
+                let totalSubdomains = 0;
+                
+                // Process each domain
+                for (const domain of domains) {
+                    const domainTrimmed = domain.trim();
+                    if (!domainTrimmed) continue;
+                    
+                    logger.info('Processing domain in bulk discovery', { domain: domainTrimmed, tools });
+                    
+                    try {
+                        const domainResult = await this.toolExecutor.executeTools(tools, domainTrimmed, options);
+                        
+                        if (domainResult.success) {
+                            const domainSubdomains = domainResult.results.reduce((sum, toolResult) => {
+                                return sum + (toolResult.count || 0);
+                            }, 0);
+                            
+                            totalSubdomains += domainSubdomains;
+                            
+                            results.push({
+                                domain: domainTrimmed,
+                                success: true,
+                                results: domainResult.results,
+                                totalSubdomains: domainSubdomains,
+                                executionId: domainResult.executionId,
+                                duration: domainResult.duration
+                            });
+                        } else {
+                            results.push({
+                                domain: domainTrimmed,
+                                success: false,
+                                error: domainResult.error,
+                                results: []
+                            });
+                        }
+                    } catch (domainError) {
+                        logger.error('Error processing domain in bulk discovery', {
+                            domain: domainTrimmed,
+                            error: domainError.message
+                        });
+                        
+                        results.push({
+                            domain: domainTrimmed,
+                            success: false,
+                            error: domainError.message,
+                            results: []
+                        });
+                    }
+                }
+                
+                logger.info('Bulk domain discovery completed', {
+                    processedDomains: results.length,
+                    totalSubdomains,
+                    successfulDomains: results.filter(r => r.success).length
+                });
+                
+                res.json({
+                    success: true,
+                    results,
+                    summary: {
+                        totalDomains: domains.length,
+                        processedDomains: results.length,
+                        successfulDomains: results.filter(r => r.success).length,
+                        totalSubdomains,
+                        tools
+                    },
+                    timestamp: new Date().toISOString()
+                });
+                
+            } catch (error) {
+                logger.error('Bulk domain discovery failed', {
+                    error: error.message
+                });
+                
+                res.status(500).json({
+                    success: false,
+                    error: 'Bulk domain discovery failed: ' + error.message
+                });
+            }
+        });
+        
         // Legacy compatibility endpoint
         this.app.post('/api/v2/run-tools', async (req, res) => {
             try {

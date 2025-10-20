@@ -95,4 +95,9 @@ router.get('/mobile', (req, res) => {
     res.sendFile(path.join(config.paths.frontend, 'tools/mobile-api-security.html'));
 });
 
+// Test page for assetfinder output
+router.get('/test-assetfinder', (req, res) => {
+    res.sendFile(path.join(config.paths.frontend, 'test-assetfinder.html'));
+});
+
 module.exports = router;

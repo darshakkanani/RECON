@@ -409,6 +409,27 @@
             background: #4a5568;
             cursor: not-allowed;
         }
+        
+        #stopBtn {
+            padding: 15px 30px;
+            background: #e53e3e;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        #stopBtn:hover:not(:disabled) {
+            background: #c53030;
+            transform: translateY(-1px);
+        }
+        
+        #stopBtn:disabled {
+            background: #4a5568;
+            cursor: not-allowed;
+        }
 
         /* Tools Grid */
         .tools-grid {
@@ -559,6 +580,23 @@
             border-radius: 8px;
             border-left: 4px solid #f56565;
         }
+        
+        /* Compact Tool Button Styles */
+        .recon-card:hover {
+            border-color: #3182ce !important;
+            background: #3a4a5c !important;
+            transform: translateY(-1px);
+        }
+        
+        .recon-card.selected {
+            border-color: #3182ce !important;
+            background: linear-gradient(135deg, #3182ce 0%, #805ad5 100%) !important;
+            color: white !important;
+        }
+        
+        .recon-card.selected div {
+            color: white !important;
+        }
     </style>
 </head>
 <body>
@@ -567,131 +605,129 @@
         <div class="nav-tabs">
             <button class="nav-tab" onclick="window.location.href='/dashboard'">Dashboard</button>
             <button class="nav-tab active" onclick="window.location.href='/recon'">Recon</button>
-            <button class="nav-tab" onclick="window.location.href='/webapp'">CVE Testing</button>
-            <button class="nav-tab" onclick="window.location.href='/subdomain'">Enumeration</button>
-            <button class="nav-tab" onclick="window.location.href='/active'">Ops Testing</button>
-            <button class="nav-tab" onclick="window.location.href='/parameters'">Input Testing</button>
-            <button class="nav-tab" onclick="window.location.href='/dns'">Bypass Testing</button>
-            <button class="nav-tab" onclick="window.location.href='/javascript'">Feature Testing</button>
-            <button class="nav-tab" onclick="window.location.href='/osint'">Creative Testing</button>
-            <button class="nav-tab" onclick="window.location.href='/code'">Chaining</button>
-            <button class="nav-tab" onclick="window.location.href='/cloud'">Report</button>
-            <button class="nav-tab" onclick="window.location.href='/mobile'">Delete</button>
+            <button class="nav-tab" onclick="window.location.href='/health'">Health</button>
         </div>
     </div>
 
     <!-- Main Layout -->
     <div class="main-layout">
-        <!-- Left Sidebar -->
+        <!-- Left Sidebar - Tools -->
         <div class="left-sidebar">
-            <div class="sidebar-section">
-                <div class="sidebar-section-title">Subdomain Discovery Hub</div>
-                <div class="stats-item">
-                    <span class="stat-label">Total Tools:</span>
-                    <span class="stat-value">12</span>
-                </div>
-                <div class="stats-item">
-                    <span class="stat-label">Techniques:</span>
-                    <span class="stat-value">6</span>
-                </div>
-                <div class="stats-item">
-                    <span class="stat-label">Coverage:</span>
-                    <span class="stat-value">100%</span>
-                </div>
-                <div class="stats-item">
-                    <span class="stat-label">Status:</span>
-                    <span class="stat-value">Active</span>
-                </div>
-            </div>
-
-            <div class="sidebar-section">
-                <div class="sidebar-section-title">Tool Categories</div>
-                <div class="category-list">
-                    <div class="category-item">
-                        <span class="category-name">🎯 Passive Discovery</span>
-                        <span class="category-count">6</span>
-                    </div>
-                    <div class="category-item">
-                        <span class="category-name">🔨 Active Bruteforce</span>
-                        <span class="category-count">3</span>
-                    </div>
-                    <div class="category-item">
-                        <span class="category-name">🔄 Permutation</span>
-                        <span class="category-count">2</span>
-                    </div>
-                    <div class="category-item">
-                        <span class="category-name">📜 JavaScript Mining</span>
-                        <span class="category-count">1</span>
-                    </div>
-                    <div class="category-item">
-                        <span class="category-name">🔔 CT Monitoring</span>
-                        <span class="category-count">2</span>
-                    </div>
-                    <div class="category-item">
-                        <span class="category-name">⚠️ Takeover Detection</span>
-                        <span class="category-count">1</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="sidebar-section">
-                <div class="sidebar-section-title">Discovery Techniques</div>
-                <div style="background: #1a202c; border-radius: 8px; padding: 12px; font-size: 12px; line-height: 1.4;">
-                    <div style="margin-bottom: 8px;">
-                        <strong style="color: #3182ce;">🔍 Passive Methods:</strong>
-                        <div style="color: #a0aec0; margin-top: 2px;">Search engines, DNS records, certificates</div>
-                    </div>
-                    <div style="margin-bottom: 8px;">
-                        <strong style="color: #3182ce;">🔨 Active Methods:</strong>
-                        <div style="color: #a0aec0; margin-top: 2px;">DNS bruteforce, wordlist attacks</div>
-                    </div>
-                    <div style="margin-bottom: 8px;">
-                        <strong style="color: #3182ce;">🔒 CT Logs:</strong>
-                        <div style="color: #a0aec0; margin-top: 2px;">Certificate transparency mining</div>
-                    </div>
-                    <div>
-                        <strong style="color: #3182ce;">🧠 AI Generation:</strong>
-                        <div style="color: #a0aec0; margin-top: 2px;">Pattern-based permutations</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="sidebar-section">
-                <div class="sidebar-section-title">Recommended Workflow</div>
-                <div style="background: #1a202c; border-radius: 8px; padding: 12px; font-size: 12px;">
-                    <div style="display: flex; align-items: center; margin-bottom: 6px;">
-                        <span style="background: #3182ce; color: white; border-radius: 50%; width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; font-size: 10px; margin-right: 8px;">1</span>
-                        <span style="color: #e0e0e0;">Start with Subfinder + Amass</span>
-                    </div>
-                    <div style="display: flex; align-items: center; margin-bottom: 6px;">
-                        <span style="background: #3182ce; color: white; border-radius: 50%; width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; font-size: 10px; margin-right: 8px;">2</span>
-                        <span style="color: #e0e0e0;">Add crt.sh for CT logs</span>
-                    </div>
-                    <div style="display: flex; align-items: center; margin-bottom: 6px;">
-                        <span style="background: #3182ce; color: white; border-radius: 50%; width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; font-size: 10px; margin-right: 8px;">3</span>
-                        <span style="color: #e0e0e0;">Use AltDNS for permutations</span>
-                    </div>
-                    <div style="display: flex; align-items: center;">
-                        <span style="background: #3182ce; color: white; border-radius: 50%; width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; font-size: 10px; margin-right: 8px;">4</span>
-                        <span style="color: #e0e0e0;">Check with SubOver</span>
+            <div style="padding: 10px;">
+                <h3 style="color: #e0e0e0; margin-bottom: 15px; font-size: 16px;">🔧 Select Tools</h3>
+                
+                <!-- Subdomain Enumeration Section -->
+                <div style="margin-bottom: 25px;">
+                    <h4 style="color: #3182ce; margin-bottom: 10px; font-size: 14px; font-weight: 600; border-bottom: 1px solid #4a5568; padding-bottom: 5px;">🔍 Subdomain Enumeration (Passive)</h4>
+                    <div style="display: flex; flex-direction: column; gap: 6px;">
+                        <!-- Passive Enumeration Tools -->
+                        <div class="recon-card" data-tool="subfinder" style="padding: 10px; margin: 0; cursor: pointer; background: #2d3748; border: 1px solid #4a5568; border-radius: 6px; transition: all 0.2s;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 14px;">🎯</span>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 500; color: #e0e0e0; font-size: 12px;">Subfinder</div>
+                                    <div style="font-size: 10px; color: #a0aec0;">Fast passive enumeration</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="recon-card" data-tool="assetfinder" style="padding: 10px; margin: 0; cursor: pointer; background: #2d3748; border: 1px solid #4a5568; border-radius: 6px; transition: all 0.2s;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 14px;">🔍</span>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 500; color: #e0e0e0; font-size: 12px;">Assetfinder</div>
+                                    <div style="font-size: 10px; color: #a0aec0;">Domain asset discovery</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="recon-card" data-tool="amass" style="padding: 10px; margin: 0; cursor: pointer; background: #2d3748; border: 1px solid #4a5568; border-radius: 6px; transition: all 0.2s;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 14px;">🌟</span>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 500; color: #e0e0e0; font-size: 12px;">Amass</div>
+                                    <div style="font-size: 10px; color: #a0aec0;">Advanced reconnaissance</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="recon-card" data-tool="findomain" style="padding: 10px; margin: 0; cursor: pointer; background: #2d3748; border: 1px solid #4a5568; border-radius: 6px; transition: all 0.2s;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 14px;">🚀</span>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 500; color: #e0e0e0; font-size: 12px;">Findomain</div>
+                                    <div style="font-size: 10px; color: #a0aec0;">Fast cross-platform</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="recon-card" data-tool="sublist3r" style="padding: 10px; margin: 0; cursor: pointer; background: #2d3748; border: 1px solid #4a5568; border-radius: 6px; transition: all 0.2s;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 14px;">🔎</span>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 500; color: #e0e0e0; font-size: 12px;">Sublist3r</div>
+                                    <div style="font-size: 10px; color: #a0aec0;">Python-based</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="recon-card" data-tool="theharvester" style="padding: 10px; margin: 0; cursor: pointer; background: #2d3748; border: 1px solid #4a5568; border-radius: 6px; transition: all 0.2s;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 14px;">🌾</span>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 500; color: #e0e0e0; font-size: 12px;">TheHarvester</div>
+                                    <div style="font-size: 10px; color: #a0aec0;">Email & subdomain</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="recon-card" data-tool="crtsh" style="padding: 10px; margin: 0; cursor: pointer; background: #2d3748; border: 1px solid #4a5568; border-radius: 6px; transition: all 0.2s;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 14px;">🔒</span>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 500; color: #e0e0e0; font-size: 12px;">crt.sh</div>
+                                    <div style="font-size: 10px; color: #a0aec0;">Certificate transparency</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        
+                        <div class="recon-card" data-tool="chaos" style="padding: 10px; margin: 0; cursor: pointer; background: #2d3748; border: 1px solid #4a5568; border-radius: 6px; transition: all 0.2s;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 14px;">💫</span>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 500; color: #e0e0e0; font-size: 12px;">Chaos</div>
+                                    <div style="font-size: 10px; color: #a0aec0;">ProjectDiscovery dataset</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="sidebar-section">
-                <div class="sidebar-section-title">Quick Tips</div>
-                <div style="background: #1a202c; border-radius: 8px; padding: 12px; font-size: 11px;">
-                    <div style="margin-bottom: 8px; padding: 6px; background: rgba(49, 130, 206, 0.1); border-radius: 4px; border-left: 3px solid #3182ce;">
-                        <strong style="color: #3182ce;">💡 Pro Tip:</strong>
-                        <div style="color: #a0aec0; margin-top: 2px;">Combine 3-4 tools for maximum coverage</div>
-                    </div>
-                    <div style="margin-bottom: 8px; padding: 6px; background: rgba(245, 101, 101, 0.1); border-radius: 4px; border-left: 3px solid #f56565;">
-                        <strong style="color: #f56565;">⚠️ Rate Limits:</strong>
-                        <div style="color: #a0aec0; margin-top: 2px;">Some APIs have request limits</div>
-                    </div>
-                    <div style="padding: 6px; background: rgba(72, 187, 120, 0.1); border-radius: 4px; border-left: 3px solid #48bb78;">
-                        <strong style="color: #48bb78;">✅ Best Results:</strong>
-                        <div style="color: #a0aec0; margin-top: 2px;">Use passive tools first, then active</div>
+                
+                <!-- Subdomain Brute-force Section -->
+                <div style="margin-bottom: 20px;">
+                    <h4 style="color: #e53e3e; margin-bottom: 10px; font-size: 14px; font-weight: 600; border-bottom: 1px solid #4a5568; padding-bottom: 5px;">🔨 Subdomain Brute-force (Active)</h4>
+                    <div style="display: flex; flex-direction: column; gap: 6px;">
+                        <!-- Active Brute-force Tools -->
+                        <div class="recon-card" data-tool="subbrute" style="padding: 10px; margin: 0; cursor: pointer; background: #2d3748; border: 1px solid #4a5568; border-radius: 6px; transition: all 0.2s;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 14px;">🔨</span>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 500; color: #e0e0e0; font-size: 12px;">Subbrute</div>
+                                    <div style="font-size: 10px; color: #a0aec0;">DNS brute-force</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="recon-card" data-tool="altdns" style="padding: 10px; margin: 0; cursor: pointer; background: #2d3748; border: 1px solid #4a5568; border-radius: 6px; transition: all 0.2s;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 14px;">🔄</span>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 500; color: #e0e0e0; font-size: 12px;">AltDNS</div>
+                                    <div style="font-size: 10px; color: #a0aec0;">Permutation generator</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -701,341 +737,157 @@
         <div class="main-content">
             <div class="content-header">
                 <div class="content-title">Complete Subdomain Discovery Arsenal</div>
-                <div class="content-subtitle">12 Professional Tools • Passive & Active Enumeration • Certificate Transparency • Bruteforce & Permutation</div>
+                <div class="content-subtitle">🔍 Passive Enumeration • 🔨 Active Brute-force • Certificate Transparency • DNS Permutation</div>
             </div>
             
-            <div class="recon-grid">
-                <!-- Subfinder -->
-                <div class="recon-card" data-tool="subfinder">
-                    <div class="card-header">
-                        <span class="card-icon">🎯</span>
-                        <div class="card-info">
-                            <h3>Subfinder</h3>
-                            <p>Fast passive subdomain enumeration</p>
-                        </div>
-                        <span class="tool-count-badge">Passive</span>
-                    </div>
-                    <div class="card-description">
-                        Fast passive subdomain enumeration tool using multiple sources for comprehensive discovery.
-                    </div>
-                    <div class="tool-tags">
-                        <span class="tool-tag">Passive</span>
-                        <span class="tool-tag">Fast</span>
-                        <span class="tool-tag">Reliable</span>
+            <!-- Target Domain Input Section -->
+            <div style="margin-top: 20px; margin-bottom: 30px; padding: 20px; background: #2d3748; border-radius: 12px; border: 1px solid #4a5568;">
+                <!-- Mode Selection -->
+                <div style="margin-bottom: 20px; display: flex; gap: 10px; align-items: center;">
+                    <h3 style="color: #e0e0e0; margin: 0;">🔍 Target Selection</h3>
+                    <div style="display: flex; gap: 5px; margin-left: auto;">
+                        <button id="singleModeBtn" class="mode-btn active" style="padding: 6px 12px; background: #3182ce; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 500;">
+                            Single Domain
+                        </button>
+                        <button id="bulkModeBtn" class="mode-btn" style="padding: 6px 12px; background: #4a5568; color: #a0aec0; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 500;">
+                            Bulk Upload
+                        </button>
                     </div>
                 </div>
-
-                <!-- Assetfinder -->
-                <div class="recon-card" data-tool="assetfinder">
-                    <div class="card-header">
-                        <span class="card-icon">🔍</span>
-                        <div class="card-info">
-                            <h3>Assetfinder</h3>
-                            <p>Domain asset discovery tool</p>
-                        </div>
-                        <span class="tool-count-badge">Assets</span>
-                    </div>
-                    <div class="card-description">
-                        Lightweight domain asset discovery tool for finding related domains and subdomains.
-                    </div>
-                    <div class="tool-tags">
-                        <span class="tool-tag">Asset Discovery</span>
-                        <span class="tool-tag">Lightweight</span>
-                        <span class="tool-tag">Fast</span>
-                    </div>
-                </div>
-
-                <!-- More tools would go here in the same format -->
-                <!-- For brevity, showing just a few key tools -->
                 
-                <!-- Amass -->
-                <div class="recon-card" data-tool="amass">
-                    <div class="card-header">
-                        <span class="card-icon">🌟</span>
-                        <div class="card-info">
-                            <h3>Amass</h3>
-                            <p>Advanced network reconnaissance</p>
-                        </div>
-                        <span class="tool-count-badge">OWASP</span>
-                    </div>
-                    <div class="card-description">
-                        Advanced network reconnaissance tool for comprehensive subdomain and asset discovery.
-                    </div>
-                    <div class="tool-tags">
-                        <span class="tool-tag">Advanced</span>
-                        <span class="tool-tag">Comprehensive</span>
-                        <span class="tool-tag">OWASP</span>
-                    </div>
-                </div>
-
-                <!-- Subbrute -->
-                <div class="recon-card" data-tool="subbrute">
-                    <div class="card-header">
-                        <span class="card-icon">🔨</span>
-                        <div class="card-info">
-                            <h3>Subbrute</h3>
-                            <p>DNS subdomain bruteforce</p>
-                        </div>
-                        <span class="tool-count-badge">Bruteforce</span>
-                    </div>
-                    <div class="card-description">
-                        DNS subdomain bruteforce tool for discovering subdomains through wordlist attacks.
-                    </div>
-                    <div class="tool-tags">
-                        <span class="tool-tag">Bruteforce</span>
-                        <span class="tool-tag">DNS</span>
-                        <span class="tool-tag">Wordlist</span>
-                    </div>
-                </div>
-
-                <!-- SubOver -->
-                <div class="recon-card" data-tool="subover">
-                    <div class="card-header">
-                        <span class="card-icon">⚠️</span>
-                        <div class="card-info">
-                            <h3>SubOver</h3>
-                            <p>Subdomain takeover detection</p>
-                        </div>
-                        <span class="tool-count-badge">Security</span>
-                    </div>
-                    <div class="card-description">
-                        Subdomain takeover detection tool for identifying potential security vulnerabilities.
-                    </div>
-                    <div class="tool-tags">
-                        <span class="tool-tag">Takeover</span>
-                        <span class="tool-tag">Security</span>
-                        <span class="tool-tag">Vulnerability</span>
-                    </div>
-                </div>
-
-                <!-- Findomain -->
-                <div class="recon-card" data-tool="findomain">
-                    <div class="card-header">
-                        <span class="card-icon">🚀</span>
-                        <div class="card-info">
-                            <h3>Findomain</h3>
-                            <p>Fast cross-platform enumerator</p>
-                        </div>
-                        <span class="tool-count-badge">Fast</span>
-                    </div>
-                    <div class="card-description">
-                        Fast cross-platform subdomain enumerator with multiple data sources and high performance.
-                    </div>
-                    <div class="tool-tags">
-                        <span class="tool-tag">Cross-Platform</span>
-                        <span class="tool-tag">Speed</span>
-                        <span class="tool-tag">Multi-Source</span>
-                    </div>
-                </div>
-
-                <!-- Sublist3r -->
-                <div class="recon-card" data-tool="sublist3r">
-                    <div class="card-header">
-                        <span class="card-icon">🔎</span>
-                        <div class="card-info">
-                            <h3>Sublist3r</h3>
-                            <p>Python-based enumerator</p>
-                        </div>
-                        <span class="tool-count-badge">Python</span>
-                    </div>
-                    <div class="card-description">
-                        Python-based subdomain enumerator using search engines and DNS bruteforcing techniques.
-                    </div>
-                    <div class="tool-tags">
-                        <span class="tool-tag">Python</span>
-                        <span class="tool-tag">Search Engines</span>
-                        <span class="tool-tag">DNS Brute</span>
-                    </div>
-                </div>
-
-                <!-- TheHarvester -->
-                <div class="recon-card" data-tool="theharvester">
-                    <div class="card-header">
-                        <span class="card-icon">🌾</span>
-                        <div class="card-info">
-                            <h3>TheHarvester</h3>
-                            <p>Email & subdomain harvester</p>
-                        </div>
-                        <span class="tool-count-badge">OSINT</span>
-                    </div>
-                    <div class="card-description">
-                        Comprehensive OSINT tool for harvesting emails, subdomains, and other information from public sources.
-                    </div>
-                    <div class="tool-tags">
-                        <span class="tool-tag">Email Harvest</span>
-                        <span class="tool-tag">OSINT</span>
-                        <span class="tool-tag">Multi-Source</span>
-                    </div>
-                </div>
-
-                <!-- crt.sh -->
-                <div class="recon-card" data-tool="crtsh">
-                    <div class="card-header">
-                        <span class="card-icon">🔒</span>
-                        <div class="card-info">
-                            <h3>crt.sh</h3>
-                            <p>Certificate transparency search</p>
-                        </div>
-                        <span class="tool-count-badge">CT Logs</span>
-                    </div>
-                    <div class="card-description">
-                        Certificate transparency log search for discovering subdomains through SSL/TLS certificates.
-                    </div>
-                    <div class="tool-tags">
-                        <span class="tool-tag">CT Logs</span>
-                        <span class="tool-tag">SSL/TLS</span>
-                        <span class="tool-tag">Certificates</span>
-                    </div>
-                </div>
-
-                <!-- Censys -->
-                <div class="recon-card" data-tool="censys">
-                    <div class="card-header">
-                        <span class="card-icon">🔍</span>
-                        <div class="card-info">
-                            <h3>Censys</h3>
-                            <p>Internet-wide search engine</p>
-                        </div>
-                        <span class="tool-count-badge">Search</span>
-                    </div>
-                    <div class="card-description">
-                        Internet-wide search engine for discovering hosts, certificates, and infrastructure information.
-                    </div>
-                    <div class="tool-tags">
-                        <span class="tool-tag">Internet Scan</span>
-                        <span class="tool-tag">Search Engine</span>
-                        <span class="tool-tag">Infrastructure</span>
-                    </div>
-                </div>
-
-                <!-- Chaos -->
-                <div class="recon-card" data-tool="chaos">
-                    <div class="card-header">
-                        <span class="card-icon">💫</span>
-                        <div class="card-info">
-                            <h3>Chaos</h3>
-                            <p>ProjectDiscovery dataset</p>
-                        </div>
-                        <span class="tool-count-badge">Dataset</span>
-                    </div>
-                    <div class="card-description">
-                        ProjectDiscovery's curated dataset of subdomains for reconnaissance and security testing.
-                    </div>
-                    <div class="tool-tags">
-                        <span class="tool-tag">Dataset</span>
-                        <span class="tool-tag">ProjectDiscovery</span>
-                        <span class="tool-tag">Curated</span>
-                    </div>
-                </div>
-
-                <!-- AltDNS -->
-                <div class="recon-card" data-tool="altdns">
-                    <div class="card-header">
-                        <span class="card-icon">🔄</span>
-                        <div class="card-info">
-                            <h3>AltDNS</h3>
-                            <p>Subdomain permutation generator</p>
-                        </div>
-                        <span class="tool-count-badge">Permutation</span>
-                    </div>
-                    <div class="card-description">
-                        Intelligent subdomain permutation generator for discovering additional subdomains through pattern analysis.
-                    </div>
-                    <div class="tool-tags">
-                        <span class="tool-tag">Permutation</span>
-                        <span class="tool-tag">Generation</span>
-                        <span class="tool-tag">Patterns</span>
-                    </div>
-                </div>
-
-                <!-- DNSGen -->
-                <div class="recon-card" data-tool="dnsgen">
-                    <div class="card-header">
-                        <span class="card-icon">⚙️</span>
-                        <div class="card-info">
-                            <h3>DNSGen</h3>
-                            <p>Advanced subdomain generation</p>
-                        </div>
-                        <span class="tool-count-badge">Generation</span>
-                    </div>
-                    <div class="card-description">
-                        Advanced subdomain generation tool using smart patterns and environment-based variations.
-                    </div>
-                    <div class="tool-tags">
-                        <span class="tool-tag">Generation</span>
-                        <span class="tool-tag">Smart Patterns</span>
-                        <span class="tool-tag">Environment</span>
-                    </div>
-                </div>
-
-                <!-- Subdomainizer -->
-                <div class="recon-card" data-tool="subdomainizer">
-                    <div class="card-header">
-                        <span class="card-icon">📜</span>
-                        <div class="card-info">
-                            <h3>Subdomainizer</h3>
-                            <p>JavaScript subdomain extraction</p>
-                        </div>
-                        <span class="tool-count-badge">JS Mining</span>
-                    </div>
-                    <div class="card-description">
-                        JavaScript-based subdomain extraction tool for discovering subdomains from client-side code.
-                    </div>
-                    <div class="tool-tags">
-                        <span class="tool-tag">JavaScript</span>
-                        <span class="tool-tag">Extraction</span>
-                        <span class="tool-tag">Client-Side</span>
-                    </div>
-                </div>
-
-                <!-- Sublert -->
-                <div class="recon-card" data-tool="sublert">
-                    <div class="card-header">
-                        <span class="card-icon">🔔</span>
-                        <div class="card-info">
-                            <h3>Sublert</h3>
-                            <p>Certificate transparency monitoring</p>
-                        </div>
-                        <span class="tool-count-badge">Monitoring</span>
-                    </div>
-                    <div class="card-description">
-                        Real-time certificate transparency monitoring for continuous subdomain discovery and alerting.
-                    </div>
-                    <div class="tool-tags">
-                        <span class="tool-tag">Monitoring</span>
-                        <span class="tool-tag">CT Logs</span>
-                        <span class="tool-tag">Real-time</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Search and Results Section -->
-            <div style="margin-top: 30px; padding: 20px; background: #2d3748; border-radius: 12px; border: 1px solid #4a5568;">
-                <div style="margin-bottom: 20px;">
-                    <h3 style="color: #e0e0e0; margin-bottom: 10px;">🔍 Target Domain</h3>
+                <!-- Single Domain Mode -->
+                <div id="singleMode" style="margin-bottom: 20px;">
                     <div style="display: flex; gap: 10px;">
                         <input type="text" id="domain" placeholder="Enter target domain (e.g., example.com)" 
                                style="flex: 1; padding: 12px; background: #1a202c; border: 1px solid #4a5568; border-radius: 6px; color: #e0e0e0; font-size: 14px;">
                         <button id="searchBtn" disabled 
                                 style="padding: 12px 24px; background: #3182ce; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 500;">
-                            Start Discovery
+                            Start 
+                        </button>
+                        <button id="stopBtn" disabled 
+                                style="padding: 12px 24px; background: #4a5568; color: white; border: none; border-radius: 6px; cursor: not-allowed; font-weight: 500; opacity: 0.6;">
+                            ⏹ Stop
                         </button>
                     </div>
+                </div>
+                
+                <!-- Bulk Upload Mode -->
+                <div id="bulkMode" style="margin-bottom: 20px; display: none;">
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; color: #a0aec0; font-size: 13px; margin-bottom: 8px;">📁 Upload domains file (.txt)</label>
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <input type="file" id="domainsFile" accept=".txt" 
+                                   style="flex: 1; padding: 12px; background: #1a202c; border: 1px solid #4a5568; border-radius: 6px; color: #e0e0e0; font-size: 14px;">
+                            <button id="bulkSearchBtn" disabled 
+                                    style="padding: 12px 24px; background: #3182ce; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 500;">
+                                Start Bulk
+                            </button>
+                            <button id="bulkStopBtn" disabled 
+                                    style="padding: 12px 24px; background: #4a5568; color: white; border: none; border-radius: 6px; cursor: not-allowed; font-weight: 500; opacity: 0.6;">
+                                ⏹ Stop
+                            </button>
+                        </div>
+                    </div>
+                    <div style="background: rgba(49, 130, 206, 0.1); border-radius: 6px; padding: 12px; border-left: 3px solid #3182ce;">
+                        <div style="font-size: 12px; color: #3182ce; font-weight: 500; margin-bottom: 5px;">📝 File Format:</div>
+                        <div style="font-size: 11px; color: #a0aec0; line-height: 1.4;">
+                            Upload a .txt file with one domain per line:<br>
+                            <code style="background: #1a202c; padding: 2px 4px; border-radius: 3px;">example.com<br>google.com<br>github.com</code>
+                        </div>
+                    </div>
+                    <div id="fileInfo" style="margin-top: 10px; font-size: 12px; color: #a0aec0; display: none;"></div>
                 </div>
                 
                 <div id="output" style="background: #1a202c; border-radius: 8px; padding: 15px; min-height: 200px; font-family: 'Monaco', 'Menlo', monospace; font-size: 13px; color: #a0aec0; border: 1px solid #4a5568;">
                     <div style="text-align: center; padding: 40px 20px;">
                         <div style="font-size: 2rem; margin-bottom: 10px;">🎯</div>
                         <h3 style="color: #e0e0e0; margin-bottom: 10px;">Ready for Subdomain Discovery!</h3>
-                        <p>Select tools above and enter a target domain to begin comprehensive subdomain enumeration.</p>
+                        <p>Select tools from the left sidebar and enter a target domain to begin comprehensive subdomain enumeration.</p>
                     </div>
                 </div>
             </div>
+            
+
         </div>
     </div>
 
     <script>
         let selectedTools = [];
+        let currentMode = 'single'; // 'single' or 'bulk'
+        let uploadedDomains = [];
+        
+        // Mode switching functionality
+        document.getElementById('singleModeBtn').addEventListener('click', function() {
+            currentMode = 'single';
+            document.getElementById('singleMode').style.display = 'block';
+            document.getElementById('bulkMode').style.display = 'none';
+            document.getElementById('singleModeBtn').classList.add('active');
+            document.getElementById('bulkModeBtn').classList.remove('active');
+            document.getElementById('singleModeBtn').style.background = '#3182ce';
+            document.getElementById('singleModeBtn').style.color = 'white';
+            document.getElementById('bulkModeBtn').style.background = '#4a5568';
+            document.getElementById('bulkModeBtn').style.color = '#a0aec0';
+            updateSearchButtons();
+        });
+        
+        document.getElementById('bulkModeBtn').addEventListener('click', function() {
+            currentMode = 'bulk';
+            document.getElementById('singleMode').style.display = 'none';
+            document.getElementById('bulkMode').style.display = 'block';
+            document.getElementById('bulkModeBtn').classList.add('active');
+            document.getElementById('singleModeBtn').classList.remove('active');
+            document.getElementById('bulkModeBtn').style.background = '#3182ce';
+            document.getElementById('bulkModeBtn').style.color = 'white';
+            document.getElementById('singleModeBtn').style.background = '#4a5568';
+            document.getElementById('singleModeBtn').style.color = '#a0aec0';
+            updateSearchButtons();
+        });
+        
+        // File upload functionality
+        document.getElementById('domainsFile').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const content = e.target.result;
+                    uploadedDomains = content.split('\n')
+                        .map(domain => domain.trim())
+                        .filter(domain => domain && domain.length > 0);
+                    
+                    const fileInfo = document.getElementById('fileInfo');
+                    fileInfo.style.display = 'block';
+                    fileInfo.innerHTML = `📊 Loaded ${uploadedDomains.length} domains from ${file.name}`;
+                    
+                    updateSearchButtons();
+                };
+                reader.readAsText(file);
+            }
+        });
+        
+        // Update search buttons based on current mode
+        function updateSearchButtons() {
+            const searchBtn = document.getElementById('searchBtn');
+            const bulkSearchBtn = document.getElementById('bulkSearchBtn');
+            const domain = document.getElementById('domain').value.trim();
+            
+            if (currentMode === 'single') {
+                if (selectedTools.length > 0 && domain) {
+                    searchBtn.disabled = false;
+                    searchBtn.textContent = `Run ${selectedTools.length} Tool${selectedTools.length > 1 ? 's' : ''}`;
+                } else {
+                    searchBtn.disabled = true;
+                    searchBtn.textContent = 'Start';
+                }
+            } else {
+                if (selectedTools.length > 0 && uploadedDomains.length > 0) {
+                    bulkSearchBtn.disabled = false;
+                    bulkSearchBtn.textContent = `Run on ${uploadedDomains.length} Domains`;
+                } else {
+                    bulkSearchBtn.disabled = true;
+                    bulkSearchBtn.textContent = 'Start Bulk';
+                }
+            }
+        }
         
         // Tool selection functionality
         document.querySelectorAll('.recon-card').forEach(card => {
@@ -1052,35 +904,15 @@
                     selectedTools.push(tool);
                 }
                 
-                // Update search button
-                const searchBtn = document.getElementById('searchBtn');
-                const domain = document.getElementById('domain').value.trim();
-                
-                if (selectedTools.length > 0 && domain) {
-                    searchBtn.disabled = false;
-                    searchBtn.textContent = `Run ${selectedTools.length} Tool${selectedTools.length > 1 ? 's' : ''}`;
-                } else {
-                    searchBtn.disabled = true;
-                    searchBtn.textContent = 'Start Discovery';
-                }
+                // Update search buttons
+                updateSearchButtons();
             });
         });
         
         // Domain input functionality
-        document.getElementById('domain').addEventListener('input', function() {
-            const domain = this.value.trim();
-            const searchBtn = document.getElementById('searchBtn');
-            
-            if (selectedTools.length > 0 && domain) {
-                searchBtn.disabled = false;
-                searchBtn.textContent = `Run ${selectedTools.length} Tool${selectedTools.length > 1 ? 's' : ''}`;
-            } else {
-                searchBtn.disabled = true;
-                searchBtn.textContent = 'Start Discovery';
-            }
-        });
+        document.getElementById('domain').addEventListener('input', updateSearchButtons);
         
-        // Search functionality
+        // Single domain search functionality
         document.getElementById('searchBtn').addEventListener('click', function() {
             const domain = document.getElementById('domain').value.trim();
             if (!domain || selectedTools.length === 0) return;
@@ -1100,6 +932,53 @@
                     output.innerHTML = `<div style="color: #68d391; margin-bottom: 10px;">✅ Discovery completed - ${data.results.length} results found</div><pre style="white-space: pre-wrap;">${data.results.join('\n')}</pre>`;
                 } else {
                     output.innerHTML = `<div style="color: #f56565;">❌ Error: ${data.error}</div>`;
+                }
+            })
+            .catch(error => {
+                output.innerHTML = `<div style="color: #f56565;">❌ Network error: ${error.message}</div>`;
+            });
+        });
+        
+        // Bulk domain search functionality
+        document.getElementById('bulkSearchBtn').addEventListener('click', function() {
+            if (uploadedDomains.length === 0 || selectedTools.length === 0) return;
+            
+            const output = document.getElementById('output');
+            output.innerHTML = `<div style="text-align: center; padding: 20px;"><div style="font-size: 1.5rem;">🔄</div><p>Running bulk subdomain discovery on ${uploadedDomains.length} domains...</p><div style="margin-top: 10px; font-size: 12px; color: #a0aec0;">This may take several minutes...</div></div>`;
+            
+            // Run bulk discovery via API
+            fetch('/api/v2/bulk-discovery', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ domains: uploadedDomains, tools: selectedTools })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    let totalResults = 0;
+                    let resultHtml = '<div style="color: #68d391; margin-bottom: 15px; font-weight: 600;">✅ Bulk Discovery Completed!</div>';
+                    
+                    data.results.forEach(domainResult => {
+                        const domainTotal = domainResult.results.reduce((sum, toolResult) => sum + (toolResult.count || 0), 0);
+                        totalResults += domainTotal;
+                        
+                        resultHtml += `<div style="margin-bottom: 20px; padding: 15px; background: #1a202c; border-radius: 8px; border-left: 3px solid #3182ce;">`;
+                        resultHtml += `<div style="font-weight: 600; color: #3182ce; margin-bottom: 10px;">🎯 ${domainResult.domain} (${domainTotal} subdomains)</div>`;
+                        
+                        domainResult.results.forEach(toolResult => {
+                            if (toolResult.success && toolResult.results && toolResult.results.length > 0) {
+                                resultHtml += `<div style="margin-bottom: 8px;"><span style="color: #68d391; font-weight: 500;">${toolResult.tool}:</span> ${toolResult.count} results</div>`;
+                                resultHtml += `<div style="font-size: 11px; color: #a0aec0; margin-left: 10px; margin-bottom: 8px;">${toolResult.results.slice(0, 3).join(', ')}${toolResult.results.length > 3 ? '...' : ''}</div>`;
+                            }
+                        });
+                        
+                        resultHtml += '</div>';
+                    });
+                    
+                    resultHtml = `<div style="color: #68d391; margin-bottom: 15px; font-weight: 600;">✅ Bulk Discovery Completed - ${totalResults} total subdomains found across ${uploadedDomains.length} domains!</div>` + resultHtml;
+                    output.innerHTML = resultHtml;
+                } else {
+                    output.innerHTML = `<div style="color: #f56565;">❌ Bulk Discovery Error: ${data.error}</div>`;
                 }
             })
             .catch(error => {
@@ -1192,7 +1071,7 @@
                             <div style="font-weight: 600; color: #3182ce; margin-bottom: 10px;">💡 Quick Start:</div>
                             <div>1. Enter a target domain above</div>
                             <div>2. Select a subdomain discovery tool</div>
-                            <div>3. Click "Start Discovery"</div>
+                            <div>3. Click "Start"</div>
                         </div>
                     </div>
                 </div>
@@ -1288,11 +1167,64 @@
 
             // Search functionality
             searchBtn.addEventListener('click', performSearch);
+            
+            // Stop functionality
+            const stopBtn = document.getElementById('stopBtn');
+            let currentController = null;
+            
+            stopBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log('Stop button clicked!', {
+                    disabled: stopBtn.disabled,
+                    hasController: !!currentController,
+                    buttonText: stopBtn.textContent
+                });
+                
+                if (!stopBtn.disabled && currentController) {
+                    console.log('Aborting controller...');
+                    currentController.abort();
+                    currentController = null;
+                    
+                    // Reset UI
+                    searchBtn.disabled = false;
+                    searchBtn.style.background = '#3182ce';
+                    searchBtn.style.cursor = 'pointer';
+                    stopBtn.disabled = true;
+                    stopBtn.style.background = '#4a5568';
+                    stopBtn.style.cursor = 'not-allowed';
+                    stopBtn.style.opacity = '0.6';
+                    
+                    output.innerHTML = `
+                        <div style="text-align: center; padding: 20px; color: #f6ad55;">
+                            <div style="font-size: 2rem; margin-bottom: 10px;">⏹</div>
+                            <div>Discovery stopped by user</div>
+                        </div>
+                    `;
+                } else {
+                    console.log('Stop button not active or no controller');
+                }
+            });
 
             async function performSearch() {
+                console.log('performSearch called', { selectedTool, domain: domainInput.value.trim() });
                 if (!selectedTool || !domainInput.value.trim()) return;
 
                 const domain = domainInput.value.trim();
+                
+                // Create abort controller for this request
+                currentController = new AbortController();
+                console.log('Created abort controller, activating stop button');
+                
+                // Update UI for running state
+                searchBtn.disabled = true;
+                searchBtn.style.background = '#4a5568';
+                searchBtn.style.cursor = 'not-allowed';
+                stopBtn.disabled = false;
+                stopBtn.style.background = '#e53e3e';
+                stopBtn.style.cursor = 'pointer';
+                stopBtn.style.opacity = '1';
+                
+                console.log('Stop button should now be active');
                 
                 // Show loading
                 output.innerHTML = `
@@ -1312,7 +1244,8 @@
                         body: JSON.stringify({
                             domain: domain,
                             tool: selectedTool
-                        })
+                        }),
+                        signal: currentController.signal
                     });
 
                     const data = await response.json();
@@ -1336,11 +1269,26 @@
                         `;
                     }
                 } catch (error) {
+                    if (error.name === 'AbortError') {
+                        // Request was aborted, UI already updated by stop button
+                        return;
+                    }
+                    
                     output.innerHTML = `
                         <div class="error">
                             ❌ Network Error: ${error.message}
                         </div>
                     `;
+                } finally {
+                    // Reset UI state after completion or error
+                    currentController = null;
+                    searchBtn.disabled = false;
+                    searchBtn.style.background = '#3182ce';
+                    searchBtn.style.cursor = 'pointer';
+                    stopBtn.disabled = true;
+                    stopBtn.style.background = '#4a5568';
+                    stopBtn.style.cursor = 'not-allowed';
+                    stopBtn.style.opacity = '0.6';
                 }
             }
         });

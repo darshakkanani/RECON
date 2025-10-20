@@ -1,6 +1,6 @@
 /**
  * ========================================
- * ADIYOGI V2 - Advanced Tool Execution Engine
+ * RECON V2 - Advanced Tool Execution Engine
  * ========================================
  * 
  * High-performance, secure tool execution system with:
@@ -188,7 +188,7 @@ class ToolExecutor extends EventEmitter {
             this.concurrentExecutions++;
             
             // Get tool configuration
-            const toolConfig = await this.getToolConfiguration(tool);
+            const toolConfig = this.getToolConfiguration(tool);
             
             // Validate inputs
             this.validateInputs(tool, domain, options);
@@ -269,27 +269,30 @@ class ToolExecutor extends EventEmitter {
         }
     }
 
-    async getToolConfiguration(tool) {
+    getToolConfiguration(tool) {
         // Tool configurations with fallback implementations
         const toolConfigs = {
             // Subdomain Discovery Tools
             subfinder: {
-                command: "subfinder",
-                args: ["-d", "{domain}", "-all", "'-r","-o", "{outputFile}"],
+                command: "sh",
+                args: ["-c", "subfinder -d {domain} -all | tee {outputFile}"],
                 category: "subdomain",
                 timeout: 180000,
                 outputType: "domains",
+                saveOutput: true,
                 fallback: {
-                    description: 'Not working'
+                    command: "subfinder",
+                    args: ["-d", "{domain}", "-all", "-o", "{outputFile}"]
                 }
             },
             
             assetfinder: {
-                command: 'assetfinder',
-                args: ['--subs-only', '{domain}'],
+                command: 'sh',
+                args: ['-c', 'assetfinder --subs-only {domain} | tee {outputFile}'],
                 category: 'subdomain',
                 timeout: 120000,
-                outputType: 'domains'
+                outputType: 'domains',
+                saveOutput: true
             },
             
             amass: {
@@ -297,15 +300,21 @@ class ToolExecutor extends EventEmitter {
                 args: ['enum', '-passive', '-d', '{domain}', '-o', '{outputFile}'],
                 category: 'subdomain',
                 timeout: 300000,
-                outputType: 'domains'
+                outputType: 'domains',
+                saveOutput: true
             },
             
             findomain: {
                 command: 'findomain',
-                args: ['-t', '{domain}', '-o'],
+                args: ['-t', '{domain}', '-u', '{outputFile}', '-q'],
                 category: 'subdomain',
                 timeout: 120000,
-                outputType: 'domains'
+                outputType: 'domains',
+                saveOutput: true,
+                fallback: {
+                    command: 'sh',
+                    args: ['-c', 'findomain -t {domain} -q | tee {outputFile}']
+                }
             },
             
             sublist3r: {
@@ -313,29 +322,121 @@ class ToolExecutor extends EventEmitter {
                 args: ['-d', '{domain}', '-o', '{outputFile}'],
                 category: 'subdomain',
                 timeout: 180000,
-                outputType: 'domains'
+                outputType: 'domains',
+                saveOutput: true
             },
-            
+                        
             theharvester: {
-                command: 'theHarvester',
-                args: ['-d', '{domain}', '-b', 'all', '-f', '{outputFile}'],
+                command: 'sh',
+                args: [
+                    '-c',
+                    'theHarvester -d {domain} -b crtsh,bing,duckduckgo -f {outputFile} 2>/dev/null && cat {outputFile} | grep -E "^[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$" | sort -u | tee {outputFile}.clean && mv {outputFile}.clean {outputFile} || echo "No subdomains found" > {outputFile}'
+                ],
                 category: 'subdomain',
                 timeout: 240000,
-                outputType: 'domains'
+                outputType: 'domains',
+                saveOutput: true,
+                fallback: {
+                    command: 'sh',
+                    args: ['-c', 'curl -s "https://crt.sh/?q=%.{domain}&output=json" | jq -r ".[].name_value" 2>/dev/null | sort -u | tee {outputFile}']
+                }
             },
-            
+ 
             crtsh: {
-                command: 'curl',
-                args: ['-s', 'https://crt.sh/?q=%.{domain}&output=json'],
+                command: 'sh',
+                args: ['-c', 'curl -s "https://crt.sh/?q=%.{domain}&output=json" | jq -r ".[].name_value" 2>/dev/null | sort -u | tee {outputFile}'],
                 category: 'subdomain',
                 timeout: 60000,
-                outputType: 'domains'
+                outputType: 'domains',
+                saveOutput: true,
+                fallback: {
+                    command: 'sh',
+                    args: ['-c', 'curl -s "https://crt.sh/?q=%.{domain}&output=json" | tee {outputFile}']
+                }
+            },
+        
+            subbrute: {
+                command: 'python3',
+                args: [
+                    '/Users/hunter/Desktop/RECON/Tools/subdmian_discovery/subbrute/subbrute.py',
+                    '-s', '/Users/hunter/Desktop/RECON/Tools/subdmian_discovery/subbrute/names.txt',
+                    '-r', '/Users/hunter/Desktop/RECON/Tools/subdmian_discovery/subbrute/resolvers.txt',
+                    '-o', '{outputFile}',
+                    '{domain}'
+                ],
+                category: 'subdomain',
+                timeout: 300000,
+                outputType: 'domains',
+                saveOutput: true,
+                fallback: {
+                    command: 'sh',
+                    args: [
+                        '-c',
+                        `for sub in www mail ftp admin test dev staging api;
+                        do nslookup $sub.{domain} | grep -q "Name:" &&
+                        echo "$sub.{domain}" | tee -a {outputFile};
+                        done`
+                    ]
+                }
+            },
+
+            subover: {
+                command: 'sh',
+                args: [
+                    '-c',
+                    'subover -l {inputFile} -v | tee {outputFile}'
+                ],
+                category: 'subdomain',
+                timeout: 180000,
+                outputType: 'domains',
+                saveOutput: true,
+                fallback: {
+                    command: 'sh',
+                    args: [
+                        '-c',
+                        `echo "Subdomain takeover check for {domain}" > {outputFile} &&
+                        curl -s -I "https://{domain}" | head -5 >> {outputFile}`
+                    ]
+                }
+            },
+
+            
+            chaos: {
+                command: 'sh',
+                args: [
+                    '-c',
+                    'export PDCP_API_KEY="867de6bd-877c-4804-a2e8-8f7c737dc1ef" && chaos -d {domain} | tee {outputFile}'
+                ],
+                category: 'subdomain',
+                timeout: 120000,
+                outputType: 'domains',
+                saveOutput: true,
+                fallback: {
+                    command: 'sh',
+                    args: ['-c', 'curl -s "https://dns.projectdiscovery.io/dns/{domain}/subdomains" -H "Accept: application/json" | jq -r ".subdomains[]?" 2>/dev/null | sort -u | tee {outputFile} || echo "Visit https://chaos.projectdiscovery.io for more information" > {outputFile}']
+                }
             },
             
+            altdns: {
+                command: 'sh',
+                args: [
+                    '-c',
+                    'if command -v altdns >/dev/null 2>&1; then echo "{domain}" | altdns -w /Users/hunter/Desktop/RECON/data/subdomain_wordlist/n0kovo_subdomains_tiny.txt | tee {outputFile}; else head -100 /Users/hunter/Desktop/RECON/data/subdomain_wordlist/n0kovo_subdomains_tiny.txt | while read sub; do if nslookup "$sub.{domain}" >/dev/null 2>&1; then echo "$sub.{domain}" | tee -a {outputFile}; fi; done; fi'
+                ],
+                category: 'subdomain',
+                timeout: 240000,
+                outputType: 'domains',
+                saveOutput: true,
+                fallback: {
+                    command: 'sh',
+                    args: ['-c', 'for prefix in www mail ftp admin test dev staging api blog shop app mobile; do if nslookup "$prefix.{domain}" >/dev/null 2>&1; then echo "$prefix.{domain}" | tee -a {outputFile}; fi; done']
+                }
+            },
+
             // Active Discovery & Bruteforce Tools
             gobuster: {
                 command: 'gobuster',
-                args: ['dns', '-d', '{domain}', '-w', '/usr/share/wordlists/subdomains.txt', '-o', '{outputFile}'],
+                args: ['dns', '-d', '{domain}', '-w', '/Users/hunter/Desktop/RECON/data/subdomain_wordlist/n0kovo_subdomains_tiny.txt', '-o', '{outputFile}'],
                 category: 'active',
                 timeout: 300000,
                 outputType: 'domains'
@@ -446,7 +547,36 @@ class ToolExecutor extends EventEmitter {
             throw new Error(`Unknown tool: ${tool}`);
         }
         
-        return toolConfig;
+        return toolConfigs[tool] || null;
+    }
+
+    // Get all subdomain discovery tools
+    getSubdomainTools() {
+        const tools = [
+            'subfinder', 'assetfinder', 'amass', 'findomain', 'sublist3r', 
+            'theharvester', 'crtsh', 'subbrute', 'subover', 
+            'chaos', 'altdns'
+        ];
+        
+        return tools.map(tool => {
+            try {
+                const config = this.getToolConfiguration(tool);
+                return {
+                    name: tool,
+                    hasOutputFile: config && (config.args.includes('{outputFile}') || config.outputRedirect),
+                    saveOutput: config && config.saveOutput,
+                    category: config && config.category
+                };
+            } catch (error) {
+                return {
+                    name: tool,
+                    hasOutputFile: false,
+                    saveOutput: false,
+                    category: 'unknown',
+                    error: error.message
+                };
+            }
+        });
     }
 
     async createExecutionContext(tool, domain, options, executionId) {
@@ -483,6 +613,17 @@ class ToolExecutor extends EventEmitter {
             executionId
         });
         
+        // Debug logging for command execution
+        logger.debug('Tool execution details', {
+            tool,
+            domain,
+            outputFile,
+            command: toolConfig.command,
+            originalArgs: toolConfig.args,
+            processedArgs,
+            saveOutput: toolConfig.saveOutput
+        });
+        
         return new Promise((resolve, reject) => {
             const timeout = toolConfig.timeout || config.execution.timeout;
             let process;
@@ -491,13 +632,19 @@ class ToolExecutor extends EventEmitter {
             let stderr = '';
             
             try {
-                // Spawn process
-                process = spawn(toolConfig.command, processedArgs, {
+                // Handle output redirection for tools that don't support -o flag
+                let spawnOptions = {
                     env: context.environment,
                     stdio: ['ignore', 'pipe', 'pipe'],
                     detached: false,
                     timeout: timeout
-                });
+                };
+                
+                // Handle output redirection differently - we'll capture stdout and write to file manually
+                // Don't modify stdio here, let stdout be captured normally
+                
+                // Spawn process
+                process = spawn(toolConfig.command, processedArgs, spawnOptions);
                 
                 // Store process reference
                 this.activeProcesses.set(executionId, {
@@ -516,7 +663,18 @@ class ToolExecutor extends EventEmitter {
                 
                 // Handle stdout
                 process.stdout.on('data', (data) => {
-                    stdout += data.toString();
+                    const dataStr = data.toString();
+                    stdout += dataStr;
+                    
+                    // If tool needs output redirection, write to file in real-time
+                    if (toolConfig.outputRedirect) {
+                        const fs = require('fs');
+                        try {
+                            fs.appendFileSync(outputFile, dataStr);
+                        } catch (writeError) {
+                            logger.warn('Failed to write stdout to file', { outputFile, error: writeError.message });
+                        }
+                    }
                 });
                 
                 // Handle stderr
@@ -589,7 +747,7 @@ class ToolExecutor extends EventEmitter {
         
         try {
             // Parse results based on tool type
-            const toolConfig = await this.getToolConfiguration(tool);
+            const toolConfig = this.getToolConfiguration(tool);
             let parsedResults = [];
             
             if (toolConfig.outputType === 'domains') {
@@ -598,15 +756,48 @@ class ToolExecutor extends EventEmitter {
                 parsedResults = this.parseTextOutput(output);
             }
             
-            // Clean up temporary files
+            // Keep output files for user access - don't delete them
+            // Verify file was actually created and has content
+            const fs = require('fs');
+            let fileInfo = { exists: false, size: 0 };
             try {
-                await fs.unlink(outputFile);
-            } catch (cleanupError) {
-                logger.warn('Failed to cleanup output file', { 
-                    outputFile, 
-                    error: cleanupError.message 
-                });
+                const stats = fs.statSync(outputFile);
+                fileInfo = { exists: true, size: stats.size };
+                
+                // If file is empty but we have output, write it manually
+                if (stats.size === 0 && output.length > 0) {
+                    fs.writeFileSync(outputFile, output, 'utf8');
+                    const newStats = fs.statSync(outputFile);
+                    fileInfo.size = newStats.size;
+                    logger.info('Manually wrote output to file', { outputFile, size: newStats.size });
+                }
+            } catch (fileError) {
+                // File doesn't exist, create it with the output
+                if (output.length > 0) {
+                    try {
+                        fs.writeFileSync(outputFile, output, 'utf8');
+                        const stats = fs.statSync(outputFile);
+                        fileInfo = { exists: true, size: stats.size };
+                        logger.info('Created output file', { outputFile, size: stats.size });
+                    } catch (writeError) {
+                        logger.error('Failed to create output file', { outputFile, error: writeError.message });
+                    }
+                }
             }
+            
+            logger.info('Output file status', { 
+                tool,
+                domain: context.domain,
+                outputFile,
+                fileExists: fileInfo.exists,
+                fileSize: fileInfo.size,
+                outputLength: output.length,
+                toolConfig: {
+                    command: toolConfig.command,
+                    saveOutput: toolConfig.saveOutput,
+                    hasOutputFileArg: toolConfig.args.some(arg => arg.includes('{outputFile}'))
+                }
+            });
             
             return {
                 results: parsedResults,

@@ -10,11 +10,9 @@ if ! command -v node &> /dev/null; then
 fi
 
 # Check if npm dependencies are installed
-if [ ! -d "src/backend/node_modules" ]; then
+if [ ! -d "node_modules" ]; then
     echo "📦 Installing npm dependencies..."
-    cd src/backend
     npm install
-    cd ../..
 fi
 
 # Create necessary directories
@@ -25,5 +23,4 @@ echo "📁 Directory structure verified"
 echo "🔧 Starting server..."
 
 # Start the server
-cd src/backend
 npm start

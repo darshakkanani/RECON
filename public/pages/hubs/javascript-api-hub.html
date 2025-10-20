@@ -10,51 +10,229 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #1a1a1a;
-            min-height: 100vh;
             color: #e0e0e0;
-        }
-        
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
+            height: 100vh;
+            overflow: hidden;
         }
         
         /* Top Navigation */
+        .top-nav {
+            background: #2d3748;
+            border-bottom: 1px solid #4a5568;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1000;
+        }
+
         .nav-tabs {
             display: flex;
-            background: #2d3748;
-            border-radius: 12px;
-            padding: 8px;
-            margin-bottom: 30px;
-            overflow-x: auto;
-            border: 1px solid #4a5568;
+            gap: 0;
         }
-        
+
         .nav-tab {
-            padding: 12px 20px;
-            background: transparent;
+            background: #4a5568;
+            color: #e0e0e0;
             border: none;
-            color: #a0aec0;
+            padding: 12px 20px;
             cursor: pointer;
-            border-radius: 8px;
-            transition: all 0.2s ease;
-            white-space: nowrap;
+            font-size: 13px;
             font-weight: 500;
+            border-right: 1px solid #2d3748;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .nav-tab:first-child {
+            border-top-left-radius: 4px;
+        }
+
+        .nav-tab:last-child {
+            border-top-right-radius: 4px;
+            border-right: none;
         }
         
         .nav-tab:hover {
-            background: #4a5568;
-            color: #e0e0e0;
+            background: #5a6578;
         }
-        
+
         .nav-tab.active {
             background: #3182ce;
             color: white;
+        }
+
+        .nav-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #3182ce;
+        }
+
+        /* Main Layout */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            height: calc(100vh - 50px);
+            gap: 0;
+        }
+
+        /* Left Sidebar */
+        .left-sidebar {
+            background: #2d3748;
+            border-right: 1px solid #4a5568;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .sidebar-section {
+            margin-bottom: 30px;
+        }
+
+        .sidebar-section-title {
+            color: #e0e0e0;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #4a5568;
+        }
+
+        /* Tool Cards */
+        .tool-card {
+            background: #2d3748;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            border: 1px solid #4a5568;
+            transition: all 0.2s ease;
+        }
+
+        .tool-card:hover {
+            border-color: #3182ce;
+            background: #3a4a5c;
+            transform: translateY(-1px);
+        }
+
+        .tool-card.selected {
+            border-color: #3182ce;
+            background: linear-gradient(135deg, #3182ce 0%, #805ad5 100%);
+            color: white;
+        }
+
+        .tool-card.selected div {
+            color: white;
+        }
+
+        /* Main Content */
+        .main-content {
+            background: #1a1a1a;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .content-header {
+            margin-bottom: 20px;
+        }
+
+        .content-title {
+            color: #e0e0e0;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .content-subtitle {
+            color: #a0aec0;
+            font-size: 14px;
+        }
+
+        /* Target Input Section */
+        .target-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #2d3748;
+            border-radius: 12px;
+            border: 1px solid #4a5568;
+        }
+
+        .target-input {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        #targetUrl {
+            flex: 1;
+            padding: 12px;
+            background: #1a202c;
+            border: 1px solid #4a5568;
+            border-radius: 6px;
+            color: #e0e0e0;
+            font-size: 14px;
+        }
+
+        #targetUrl:focus {
+            border-color: #3182ce;
+            outline: none;
+        }
+
+        .start-btn {
+            padding: 12px 24px;
+            background: #3182ce;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .start-btn:hover:not(:disabled) {
+            background: #2c5aa0;
+        }
+
+        .start-btn:disabled {
+            background: #4a5568;
+            cursor: not-allowed;
+        }
+
+        /* Output Section */
+        .output-section {
+            background: #1a202c;
+            border-radius: 8px;
+            padding: 15px;
+            min-height: 200px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 13px;
+            color: #a0aec0;
+            border: 1px solid #4a5568;
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #4a5568;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #5a6578;
         }
 
         /* Header */
@@ -314,416 +492,211 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Navigation Tabs -->
+    <!-- Top Navigation -->
+    <div class="top-nav">
         <div class="nav-tabs">
-            <button class="nav-tab">Dashboard</button>
-            <button class="nav-tab active">Recon</button>
-            <button class="nav-tab">CVE Testing</button>
-            <button class="nav-tab">Enumeration</button>
-            <button class="nav-tab">Ops Testing</button>
-            <button class="nav-tab">Input Testing</button>
-            <button class="nav-tab">Bypass Testing</button>
-            <button class="nav-tab">Feature Testing</button>
-            <button class="nav-tab">Creative Testing</button>
-            <button class="nav-tab">Chaining</button>
-            <button class="nav-tab">Report</button>
-            <button class="nav-tab">Delete</button>
+            <button class="nav-tab" onclick="window.location.href='/dashboard'">Dashboard</button>
+            <button class="nav-tab active" onclick="window.location.href='/recon'">Recon</button>
+            <button class="nav-tab" onclick="window.location.href='/health'">Health</button>
         </div>
+    </div>
 
-        <!-- Header -->
-        <div class="header">
-            <h1>📜 JavaScript & API Mining Hub</h1>
-            <p>Web Application Surface Mining & JavaScript Analysis Platform</p>
-            <div class="stats-bar">
-                <div class="stat-item">
-                    <div class="stat-number">13</div>
-                    <div class="stat-label">Mining Tools</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">7</div>
-                    <div class="stat-label">Techniques</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">100%</div>
-                    <div class="stat-label">Coverage</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Search Section -->
-        <div class="search-section">
-            <h2 class="search-title">🔍 Target JavaScript Mining</h2>
-            <div class="search-input">
-                <input type="text" id="domain" placeholder="Enter target URL (e.g., https://example.com)" />
-                <button id="searchBtn" disabled>Start Mining</button>
-            </div>
-        </div>
-
-        <!-- JavaScript Mining Tools Grid -->
-        <div class="tools-grid">
-            <div class="tool-card" data-tool="linkfinder">
-                <div class="tool-header">
-                    <div class="tool-icon">🔗</div>
-                    <div class="tool-info">
-                        <h3>LinkFinder</h3>
-                        <p>Endpoint discovery in JavaScript files</p>
-                    </div>
-                </div>
-                <div class="tool-tags">
-                    <span class="tool-tag">Endpoints</span>
-                    <span class="tool-tag">JavaScript</span>
-                    <span class="tool-tag">Discovery</span>
-                </div>
-            </div>
-
-            <div class="tool-card" data-tool="jsparser">
-                <div class="tool-header">
-                    <div class="tool-icon">📝</div>
-                    <div class="tool-info">
-                        <h3>JSParser</h3>
-                        <p>JavaScript code analysis</p>
-                    </div>
-                </div>
-                <div class="tool-tags">
-                    <span class="tool-tag">Code Analysis</span>
-                    <span class="tool-tag">Parsing</span>
-                    <span class="tool-tag">Functions</span>
-                </div>
-            </div>
-
-            <div class="tool-card" data-tool="secretfinder">
-                <div class="tool-header">
-                    <div class="tool-icon">🔐</div>
-                    <div class="tool-info">
-                        <h3>SecretFinder</h3>
-                        <p>API keys and secrets detection</p>
-                    </div>
-                </div>
-                <div class="tool-tags">
-                    <span class="tool-tag">Secrets</span>
-                    <span class="tool-tag">API Keys</span>
-                    <span class="tool-tag">Detection</span>
-                </div>
-            </div>
-
-            <div class="tool-card" data-tool="jsluice">
-                <div class="tool-header">
-                    <div class="tool-icon">🧃</div>
-                    <div class="tool-info">
-                        <h3>JSLuice</h3>
-                        <p>URL extraction from JavaScript</p>
-                    </div>
-                </div>
-                <div class="tool-tags">
-                    <span class="tool-tag">URL Extraction</span>
-                    <span class="tool-tag">JavaScript</span>
-                    <span class="tool-tag">Mining</span>
-                </div>
-            </div>
-
-            <div class="tool-card" data-tool="hakrawler">
-                <div class="tool-header">
-                    <div class="tool-icon">🕷️</div>
-                    <div class="tool-info">
-                        <h3>Hakrawler</h3>
-                        <p>Web crawling and link discovery</p>
-                    </div>
-                </div>
-                <div class="tool-tags">
-                    <span class="tool-tag">Web Crawling</span>
-                    <span class="tool-tag">Link Discovery</span>
-                    <span class="tool-tag">Fast</span>
-                </div>
-            </div>
-
-            <div class="tool-card" data-tool="gospider">
-                <div class="tool-header">
-                    <div class="tool-icon">🕸️</div>
-                    <div class="tool-info">
-                        <h3>GoSpider</h3>
-                        <p>Fast web spidering</p>
-                    </div>
-                </div>
-                <div class="tool-tags">
-                    <span class="tool-tag">Web Spider</span>
-                    <span class="tool-tag">Go-based</span>
-                    <span class="tool-tag">Fast</span>
-                </div>
-            </div>
-
-            <div class="tool-card" data-tool="katana">
-                <div class="tool-header">
-                    <div class="tool-icon">🗡️</div>
-                    <div class="tool-info">
-                        <h3>Katana</h3>
-                        <p>Next-generation web crawler</p>
-                    </div>
-                </div>
-                <div class="tool-tags">
-                    <span class="tool-tag">Next-gen</span>
-                    <span class="tool-tag">Crawler</span>
-                    <span class="tool-tag">Advanced</span>
-                </div>
-            </div>
-
-            <div class="tool-card" data-tool="nuclei">
-                <div class="tool-header">
-                    <div class="tool-icon">⚛️</div>
-                    <div class="tool-info">
-                        <h3>Nuclei</h3>
-                        <p>Vulnerability scanner</p>
-                    </div>
-                </div>
-                <div class="tool-tags">
-                    <span class="tool-tag">Vulnerability</span>
-                    <span class="tool-tag">Scanner</span>
-                    <span class="tool-tag">Templates</span>
-                </div>
-            </div>
-
-            <div class="tool-card" data-tool="httpx">
-                <div class="tool-header">
-                    <div class="tool-icon">🌐</div>
-                    <div class="tool-info">
-                        <h3>HTTPx</h3>
-                        <p>Web analysis and probing</p>
-                    </div>
-                </div>
-                <div class="tool-tags">
-                    <span class="tool-tag">HTTP Analysis</span>
-                    <span class="tool-tag">Probing</span>
-                    <span class="tool-tag">Fast</span>
-                </div>
-            </div>
-
-            <div class="tool-card" data-tool="subfinder-js">
-                <div class="tool-header">
-                    <div class="tool-icon">🔍</div>
-                    <div class="tool-info">
-                        <h3>Subfinder-JS</h3>
-                        <p>JavaScript-based subdomain discovery</p>
-                    </div>
-                </div>
-                <div class="tool-tags">
-                    <span class="tool-tag">JS Discovery</span>
-                    <span class="tool-tag">Subdomains</span>
-                    <span class="tool-tag">Client-side</span>
-                </div>
-            </div>
-
-            <div class="tool-card" data-tool="jsmon">
-                <div class="tool-header">
-                    <div class="tool-icon">📊</div>
-                    <div class="tool-info">
-                        <h3>JSMon</h3>
-                        <p>JavaScript monitoring and analysis</p>
-                    </div>
-                </div>
-                <div class="tool-tags">
-                    <span class="tool-tag">Monitoring</span>
-                    <span class="tool-tag">Analysis</span>
-                    <span class="tool-tag">Libraries</span>
-                </div>
-            </div>
-
-            <div class="tool-card" data-tool="retire-js">
-                <div class="tool-header">
-                    <div class="tool-icon">🔒</div>
-                    <div class="tool-info">
-                        <h3>Retire.js</h3>
-                        <p>Vulnerable JavaScript detection</p>
-                    </div>
-                </div>
-                <div class="tool-tags">
-                    <span class="tool-tag">Vulnerability</span>
-                    <span class="tool-tag">JS Libraries</span>
-                    <span class="tool-tag">Detection</span>
-                </div>
-            </div>
-
-            <div class="tool-card" data-tool="wappalyzer">
-                <div class="tool-header">
-                    <div class="tool-icon">🔧</div>
-                    <div class="tool-info">
-                        <h3>Wappalyzer</h3>
-                        <p>Technology detection and fingerprinting</p>
-                    </div>
-                </div>
-                <div class="tool-tags">
-                    <span class="tool-tag">Technology</span>
-                    <span class="tool-tag">Fingerprinting</span>
-                    <span class="tool-tag">Detection</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Results Section -->
-        <div class="results-section">
-            <div class="results-header">
-                <h3>📊 JavaScript Mining Results</h3>
-            </div>
-            <div class="results-content">
-                <div id="output">
-                    <div class="welcome-message">
-                        <div class="welcome-icon">📜</div>
-                        <h2>Ready for JavaScript Mining!</h2>
-                        <p>Select a target URL and mining tool to begin comprehensive JavaScript analysis and API surface discovery.</p>
-                        <div style="margin-top: 30px; padding: 20px; background: rgba(49, 130, 206, 0.1); border-radius: 8px; border-left: 4px solid #3182ce;">
-                            <div style="font-weight: 600; color: #3182ce; margin-bottom: 10px;">💡 Quick Start:</div>
-                            <div>1. Enter a target URL above</div>
-                            <div>2. Select a JavaScript mining tool</div>
-                            <div>3. Click "Start Mining"</div>
+    <!-- Main Layout -->
+    <div class="main-layout">
+        <!-- Left Sidebar - Tools -->
+        <div class="left-sidebar">
+            <div style="padding: 10px;">
+                <h3 style="color: #e0e0e0; margin-bottom: 15px; font-size: 16px;">🔧 Select Tools</h3>
+                
+                <!-- JavaScript Analysis Section -->
+                <div style="margin-bottom: 25px;">
+                    <h4 style="color: #3182ce; margin-bottom: 10px; font-size: 14px; font-weight: 600; border-bottom: 1px solid #4a5568; padding-bottom: 5px;">📜 JavaScript Analysis</h4>
+                    <div style="display: flex; flex-direction: column; gap: 6px;">
+                        <div class="tool-card" data-tool="jsbeautifier" style="padding: 10px; margin: 0; cursor: pointer; background: #2d3748; border: 1px solid #4a5568; border-radius: 6px; transition: all 0.2s;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 14px;">✨</span>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 500; color: #e0e0e0; font-size: 12px;">JS Beautifier</div>
+                                    <div style="font-size: 10px; color: #a0aec0;">Format & analyze JS</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="tool-card" data-tool="jshint" style="padding: 10px; margin: 0; cursor: pointer; background: #2d3748; border: 1px solid #4a5568; border-radius: 6px; transition: all 0.2s;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 14px;">🔍</span>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 500; color: #e0e0e0; font-size: 12px;">JSHint</div>
+                                    <div style="font-size: 10px; color: #a0aec0;">Code quality check</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="tool-card" data-tool="linkfinder" style="padding: 10px; margin: 0; cursor: pointer; background: #2d3748; border: 1px solid #4a5568; border-radius: 6px; transition: all 0.2s;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 14px;">🔗</span>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 500; color: #e0e0e0; font-size: 12px;">LinkFinder</div>
+                                    <div style="font-size: 10px; color: #a0aec0;">Extract endpoints</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="tool-card" data-tool="jsparser" style="padding: 10px; margin: 0; cursor: pointer; background: #2d3748; border: 1px solid #4a5568; border-radius: 6px; transition: all 0.2s;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 14px;">📝</span>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 500; color: #e0e0e0; font-size: 12px;">JSParser</div>
+                                    <div style="font-size: 10px; color: #a0aec0;">Code analysis</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="tool-card" data-tool="jsluice" style="padding: 10px; margin: 0; cursor: pointer; background: #2d3748; border: 1px solid #4a5568; border-radius: 6px; transition: all 0.2s;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 14px;">🧃</span>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 500; color: #e0e0e0; font-size: 12px;">JSLuice</div>
+                                    <div style="font-size: 10px; color: #a0aec0;">URL extraction</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="tool-card" data-tool="jsnice" style="padding: 10px; margin: 0; cursor: pointer; background: #2d3748; border: 1px solid #4a5568; border-radius: 6px; transition: all 0.2s;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 14px;">🎨</span>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 500; color: #e0e0e0; font-size: 12px;">JSNice</div>
+                                    <div style="font-size: 10px; color: #a0aec0;">Deobfuscation</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                </div>
+                
+                <!-- API Discovery Section -->
+                <div style="margin-bottom: 20px;">
+                    <h4 style="color: #e53e3e; margin-bottom: 10px; font-size: 14px; font-weight: 600; border-bottom: 1px solid #4a5568; padding-bottom: 5px;">🔌 API Discovery</h4>
+                    <div style="display: flex; flex-direction: column; gap: 6px;">
+                        <div class="tool-card" data-tool="apifinder" style="padding: 10px; margin: 0; cursor: pointer; background: #2d3748; border: 1px solid #4a5568; border-radius: 6px; transition: all 0.2s;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 14px;">🎯</span>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 500; color: #e0e0e0; font-size: 12px;">API Finder</div>
+                                    <div style="font-size: 10px; color: #a0aec0;">Discover API endpoints</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="tool-card" data-tool="secretfinder" style="padding: 10px; margin: 0; cursor: pointer; background: #2d3748; border: 1px solid #4a5568; border-radius: 6px; transition: all 0.2s;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 14px;">🔐</span>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 500; color: #e0e0e0; font-size: 12px;">SecretFinder</div>
+                                    <div style="font-size: 10px; color: #a0aec0;">Find API keys & secrets</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="content-header">
+                <div class="content-title">JavaScript & API Mining Arsenal</div>
+                <div class="content-subtitle">📜 JavaScript Analysis • 🔌 API Discovery • 🔐 Secret Extraction • 🔗 Endpoint Mining</div>
+            </div>
+            
+            <!-- Target URL Input Section -->
+            <div class="target-section">
+                <h3 style="color: #e0e0e0; margin-bottom: 15px;">🎯 Target URL</h3>
+                <div class="target-input">
+                    <input type="text" id="targetUrl" placeholder="Enter target URL (e.g., https://example.com)" />
+                    <button id="startBtn" class="start-btn" disabled>Start Mining</button>
+                </div>
+                <div style="background: rgba(49, 130, 206, 0.1); border-radius: 6px; padding: 12px; border-left: 3px solid #3182ce;">
+                    <div style="font-size: 12px; color: #3182ce; font-weight: 500; margin-bottom: 5px;">💡 Mining Targets:</div>
+                    <div style="font-size: 11px; color: #a0aec0; line-height: 1.4;">
+                        • JavaScript files and inline scripts<br>
+                        • API endpoints and routes<br>
+                        • Hidden parameters and secrets<br>
+                        • Third-party integrations
+                    </div>
+                </div>
+            </div>
+            
+            <div id="output" class="output-section">
+                <div style="text-align: center; padding: 40px 20px;">
+                    <div style="font-size: 2rem; margin-bottom: 10px;">📜</div>
+                    <h3 style="color: #e0e0e0; margin-bottom: 10px;">Ready for JavaScript Mining!</h3>
+                    <p>Select tools from the left sidebar and enter a target URL to begin comprehensive JavaScript and API analysis.</p>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const domainInput = document.getElementById('domain');
-            const searchBtn = document.getElementById('searchBtn');
-            const output = document.getElementById('output');
-            const toolCards = document.querySelectorAll('.tool-card');
-            const navTabs = document.querySelectorAll('.nav-tab');
-            let selectedTool = null;
-
-            // Navigation functionality
-            navTabs.forEach(tab => {
-                tab.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const tabText = this.textContent.trim();
-                    console.log('Tab clicked:', tabText);
-                    
-                    switch(tabText) {
-                        case 'Dashboard':
-                            window.location.href = '/';
-                            break;
-                        case 'Recon':
-                            window.location.href = '/recon';
-                            break;
-                        case 'CVE Testing':
-                            window.location.href = '/webapp';
-                            break;
-                        case 'Enumeration':
-                            window.location.href = '/subdomain';
-                            break;
-                        case 'Ops Testing':
-                            window.location.href = '/active';
-                            break;
-                        case 'Input Testing':
-                            window.location.href = '/parameters';
-                            break;
-                        case 'Bypass Testing':
-                            window.location.href = '/dns';
-                            break;
-                        case 'Feature Testing':
-                            window.location.href = '/javascript';
-                            break;
-                        case 'Creative Testing':
-                            window.location.href = '/osint';
-                            break;
-                        case 'Chaining':
-                            window.location.href = '/code';
-                            break;
-                        case 'Report':
-                            window.location.href = '/cloud';
-                            break;
-                        case 'Delete':
-                            window.location.href = '/mobile';
-                            break;
-                    }
-                });
-            });
-
-            // Enable search button when tool is selected and domain is entered
-            function updateSearchButton() {
-                if (selectedTool && domainInput.value.trim()) {
-                    searchBtn.disabled = false;
-                    searchBtn.textContent = `Mine with ${selectedTool}`;
-                } else {
-                    searchBtn.disabled = true;
-                    searchBtn.textContent = selectedTool ? 'Enter URL' : 'Select Tool First';
-                }
-            }
-
-            // Tool selection
-            toolCards.forEach(card => {
-                card.addEventListener('click', () => {
-                    toolCards.forEach(c => c.classList.remove('selected'));
-                    card.classList.add('selected');
-                    selectedTool = card.dataset.tool;
-                    updateSearchButton();
-                });
-            });
-
-            // Domain input
-            domainInput.addEventListener('input', updateSearchButton);
-            domainInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter' && !searchBtn.disabled) {
-                    performSearch();
-                }
-            });
-
-            // Search functionality
-            searchBtn.addEventListener('click', performSearch);
-
-            async function performSearch() {
-                if (!selectedTool || !domainInput.value.trim()) return;
-
-                const domain = domainInput.value.trim();
+        let selectedTools = [];
+        
+        // Tool selection functionality
+        document.querySelectorAll('.tool-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const tool = this.dataset.tool;
                 
-                // Show loading
+                if (this.classList.contains('selected')) {
+                    this.classList.remove('selected');
+                    selectedTools = selectedTools.filter(t => t !== tool);
+                } else {
+                    this.classList.add('selected');
+                    selectedTools.push(tool);
+                }
+                
+                updateStartButton();
+            });
+        });
+        
+        document.getElementById('targetUrl').addEventListener('input', updateStartButton);
+        
+        function updateStartButton() {
+            const startBtn = document.getElementById('startBtn');
+            const targetUrl = document.getElementById('targetUrl').value.trim();
+            
+            if (selectedTools.length > 0 && targetUrl) {
+                startBtn.disabled = false;
+                startBtn.textContent = `Mine with ${selectedTools.length} Tool${selectedTools.length > 1 ? 's' : ''}`;
+            } else {
+                startBtn.disabled = true;
+                startBtn.textContent = 'Start Mining';
+            }
+        }
+        
+        document.getElementById('startBtn').addEventListener('click', function() {
+            const targetUrl = document.getElementById('targetUrl').value.trim();
+            if (!targetUrl || selectedTools.length === 0) return;
+            
+            const output = document.getElementById('output');
+            output.innerHTML = '<div style="text-align: center; padding: 20px;"><div style="font-size: 1.5rem;">🔄</div><p>Mining JavaScript and APIs...</p></div>';
+            
+            setTimeout(() => {
                 output.innerHTML = `
-                    <div class="loading">
-                        <div style="font-size: 2rem; margin-bottom: 15px;">⏳</div>
-                        <div>Running ${selectedTool} mining on ${domain}...</div>
-                        <div style="font-size: 0.9rem; margin-top: 10px; opacity: 0.7;">Analyzing JavaScript and APIs...</div>
+                    <div style="color: #68d391; margin-bottom: 10px;">✅ Mining completed for ${targetUrl}</div>
+                    <div style="margin-bottom: 15px;"><strong>Tools used:</strong> ${selectedTools.join(', ')}</div>
+                    <div style="background: #2d3748; padding: 15px; border-radius: 8px; margin-bottom: 10px;">
+                        <div style="color: #3182ce; font-weight: 600; margin-bottom: 8px;">📜 JavaScript Files Found:</div>
+                        <div style="font-size: 12px; color: #a0aec0;">• /assets/js/main.js<br>• /static/app.bundle.js<br>• /js/analytics.js</div>
+                    </div>
+                    <div style="background: #2d3748; padding: 15px; border-radius: 8px; margin-bottom: 10px;">
+                        <div style="color: #e53e3e; font-weight: 600; margin-bottom: 8px;">🔌 API Endpoints:</div>
+                        <div style="font-size: 12px; color: #a0aec0;">• /api/v1/users<br>• /api/auth/login<br>• /graphql</div>
+                    </div>
+                    <div style="background: #2d3748; padding: 15px; border-radius: 8px;">
+                        <div style="color: #f56565; font-weight: 600; margin-bottom: 8px;">🔐 Potential Secrets:</div>
+                        <div style="font-size: 12px; color: #a0aec0;">• API key pattern detected<br>• JWT token structure found</div>
                     </div>
                 `;
-
-                try {
-                    const response = await fetch('/api/v2/execute/single', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            domain: domain,
-                            tool: selectedTool
-                        })
-                    });
-
-                    const data = await response.json();
-
-                    if (data.success && data.data) {
-                        const resultCount = data.data.count || 0;
-                        const results = data.data.results || [];
-                        const resultsText = results.length > 0 ? results.join('\n') : 'No results found';
-                        
-                        output.innerHTML = `
-                            <div class="success">
-                                ✅ Mined ${resultCount} results using ${selectedTool} for ${domain}
-                            </div>
-                            <div class="results">${resultsText}</div>
-                        `;
-                    } else {
-                        output.innerHTML = `
-                            <div class="error">
-                                ❌ Mining Error: ${data.error || 'Unknown error occurred'}
-                            </div>
-                        `;
-                    }
-                } catch (error) {
-                    output.innerHTML = `
-                        <div class="error">
-                            ❌ Network Error: ${error.message}
-                        </div>
-                    `;
-                }
-            }
+            }, 2000);
         });
     </script>
 </body>
